@@ -59,8 +59,39 @@ uint8 bluetooth_read(void){
     return usart_getc(BLUETOOTH_USART);
 }
 
-void bluetooth_write(unsigned char ch){
+void bluetooth_writeChar(unsigned char ch){
     usart_putc(BLUETOOTH_USART, ch);
+}
+
+void bluetooth_writeString(const char *str){
+    usart_putstr(BLUETOOTH_USART, str);
+}
+
+void bluetooth_writeUnsignedInt(uint32 num){
+    usart_putudec(BLUETOOTH_USART, num);
+}
+
+void bluetooth_println(void){
+    bluetooth_writeChar('\r');
+    bluetooth_writeChar('\n');
+}
+
+void bluetooth_printString(const char str[]){
+    bluetooth_writeString(str);
+}
+
+void bluetooth_printlnString(const char str[]){
+    bluetooth_printString(str);
+    bluetooth_println();
+}
+
+void bluetooth_printChar(char c){
+    bluetooth_writeChar(c);
+}
+
+void bluetooth_printlnChar(char c){
+    bluetooth_printChar(c);
+    bluetooth_println();
 }
 
 void bluetooth_flush(void){

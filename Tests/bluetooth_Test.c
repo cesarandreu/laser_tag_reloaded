@@ -27,7 +27,7 @@ void setup(void) {
 }
 
 void loop(void) {
-    bluetooth_write(currentChar);
+    bluetooth_writeChar(currentChar);
 
     if(bluetooth_available()){
         currentChar = bluetooth_read();

@@ -40,7 +40,14 @@ void bluetooth_start(void);
 void bluetooth_end(void);
 uint32 bluetooth_available(void);
 uint8 bluetooth_read(void);
-void bluetooth_write(unsigned char);
+void bluetooth_writeChar(unsigned char);
+void bluetooth_writeString(const char *str);
+void bluetooth_writeUnsignedInt(uint32);
+void bluetooth_println(void);
+void bluetooth_printString(const char[]);
+void bluetooth_printlnString(const char[]);
+void bluetooth_printChar(char);
+void bluetooth_printlnChar(char);
 void bluetooth_flush(void);
 
 #ifdef __cplusplus
