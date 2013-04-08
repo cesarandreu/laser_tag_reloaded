@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2010 Bryan Newbold.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,13 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
-//@TODO: Does not implement the check which allows the computer to
-//       automatically reset the board. Should add it later on. It
-//       would be very convenient. As it stands right now, you have
-//       to reset the board and put it in DFU mode to flash it again.
-
-#ifndef _USB_H_
-#define _USB_H_
+#ifndef _SPEAKER_H_
+#define _SPEAKER_H_
 
 /* Conditional extern "C" so we're safe to call from C++ files */
 #ifdef __cplusplus
@@ -38,23 +33,29 @@ extern "C" {
 #endif
 
 #include <libmaple/libmaple.h>
+#include <libmaple/timer.h>
 
-void usb_start(void);
-void usb_end(void);
-void usb_writeChar(uint8);
-void usb_writeString(const char *str);
-void usb_write(const void*, uint32);
-uint32 usb_available(void);
-uint32 usb_readString(void *buf, uint32 len);
-uint32 usb_read(void);
-uint8 usb_pending(void);
-uint8 usb_isConnected(void);
-void usb_println(void);
-void usb_printString(const char[]);
-void usb_printlnString(const char[]);
-void usb_printChar(char);
-void usb_printlnChar(char);
+typedef timer_mode TimerMode;
 
+
+void speaker_pause(void);
+void speaker_resume(void);
+void speaker_setPrescaleFactor(uint32);
+void speaker_setOverflow(uint16);
+uint16 speaker_getOverflow(void);
+void speaker_setCount(uint16);
+uint16 speaker_setPeriod(uint32);
+void speaker_setMode(int, timer_mode mode);
+void speaker_setCompare(int, uint16);
+void speaker_attachInterrupt(int, voidFuncPtr);
+void speaker_detachInterrupt(int);
+void speaker_refresh(void);
+void speaker_start(void);
+void speaker_toggle(void);
+void speaker_shoot(void);
+void speaker_hit(void);
+void speaker_playHit(void);
+void speaker_playShoot(void);
 
 #ifdef __cplusplus
 }

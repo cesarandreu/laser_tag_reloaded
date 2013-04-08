@@ -24,6 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
+//@TODO: Organize this file more. Remove redundant or useless data.
+
 #include "initialize.h"
 #include <libmaple/libmaple_types.h>
 #include <libmaple/gpio.h>

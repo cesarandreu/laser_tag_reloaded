@@ -1,3 +1,4 @@
+//This is the default main. It initializes the boards peripherals and nothing more.
 
 //Local includes:
 #include <libmaple/libmaple.h>

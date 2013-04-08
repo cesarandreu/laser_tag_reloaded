@@ -24,6 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
+//@TODO: Organize this file more. Remove redundant or useless data.
+
 #ifndef _INITIALIZE_H_
 #define _INITIALIZE_H_
 

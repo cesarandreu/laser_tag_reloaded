@@ -63,6 +63,8 @@ cSRCS_$(d) := real-main.c
 cSRCS_$(d) += libraries/initialize.c
 cSRCS_$(d) += libraries/usb.c
 cSRCS_$(d) += libraries/bluetooth.c
+cSRCS_$(d) += libraries/speaker.c
+
 
 
 

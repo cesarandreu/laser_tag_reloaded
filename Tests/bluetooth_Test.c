@@ -1,8 +1,8 @@
 //Bluetooth test.
+//Tested on the BlueSMiRF Silver (RN-42 module).
 //Requires the bluetooth module be connected at pins 8 and 9.
 //If the receivedChar is 'a' then it turns on the onboard LED.
 //Also prints to the usb_serial whatever value it has. 
-
 
 //Local includes:
 #include <libmaple/libmaple.h>
