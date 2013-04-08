@@ -62,6 +62,8 @@ ASFLAGS_$(d) :=
 cSRCS_$(d) := real-main.c
 cSRCS_$(d) += libraries/initialize.c
 cSRCS_$(d) += libraries/usb.c
+cSRCS_$(d) += libraries/bluetooth.c
+
 
 
 # cppSRCS_$(d) are the C++ sources we want compiled.  We have our own
