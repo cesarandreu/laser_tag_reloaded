@@ -40,10 +40,10 @@
 #define BLUETOOTH_PIN_RX 3
 
 void bluetooth_start(void){
-    usart_config_gpio_async(BLUETOOTH_USART, BLUETOOTH_PORT_RX, BLUETOOTH_PIN_RX, BLUETOOTH_PORT_TX, BLUETOOTH_PIN_TX, 0);
+    usart_config_gpios_async(BLUETOOTH_USART, BLUETOOTH_PORT_RX, BLUETOOTH_PIN_RX, BLUETOOTH_PORT_TX, BLUETOOTH_PIN_TX, 0);
     usart_init(BLUETOOTH_USART);
     usart_set_baud_rate(BLUETOOTH_USART, USART_USE_PCLK, BLUETOOTH_BAUD);
-    usar_enable(BLUETOOTH_USART);
+    usart_enable(BLUETOOTH_USART);
 }
 
 void bluetooth_end(void){
