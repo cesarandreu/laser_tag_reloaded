@@ -56,7 +56,6 @@
 
 
 
-
 //Speaker variables
 int count;
 int period;
