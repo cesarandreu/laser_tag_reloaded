@@ -46,8 +46,8 @@ void gps_start(void){
 
     //Enable BJT to turn on GPS
     //TODO: Confirm this isn't affected by being on UART CLK Pin (Currently unused)
-    //gpio_set_mode(GPIOA, 1, GPIO_OUTPUT_PP);
-    //gpio_write_bit(GPIOA, 8, 1);
+    gpio_set_mode(GPIOA, 1, GPIO_OUTPUT_PP);
+    gpio_write_bit(GPIOA, 8, 1);
     
     //Enable GPS USART Port
     usart_enable(GPS_USART);
@@ -55,7 +55,7 @@ void gps_start(void){
 
 void gps_end(void){
     usart_disable(GPS_USART);
-    //gpio_write_bit(GPIOA, 8, 0);
+    gpio_write_bit(GPIOA, 8, 0);
 }
 
 uint32 gps_available(void){
