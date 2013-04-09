@@ -15,7 +15,7 @@
 char currentChar = 'a';
 
 void pushButton(void){
-    sender_shoot();
+    sender_shoot()
     speaker_playHit();
 }
 
@@ -23,8 +23,6 @@ void pushButton(void){
 void setup(void) {
     bluetooth_start();
     speaker_start();
-    sender_start();
-    receiver_start();
 
     //Onboard button
     gpio_set_mode(GPIOB, 8, GPIO_INPUT_PU);
@@ -43,7 +41,6 @@ void loop(void) {
         currentChar = bluetooth_read();
         bluetooth_writeChar(currentChar);
         if(currentChar=='s'){
-            sender_shoot();
             speaker_playShoot();
         }
         if(currentChar=='h'){

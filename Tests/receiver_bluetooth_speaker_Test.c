@@ -1,7 +1,8 @@
 
 //Local includes:
 #include "initialize.h"
-#include "usb.h"
+#include "bluetooth.h"
+#include "speaker.h"
 #include "receiver.h"
 
 #include <libmaple/libmaple.h>
@@ -12,13 +13,14 @@
 
 // setup() and loop():
 void setup(void) {
-    usb_start();
+    speaker_start();
+    bluetooth_start();
     receiver_start();
 }
 
 void loop(void) {
-    usb_printlnString("This is a loop!");
-    delay_us(100000);
+    //usb_printlnString("This is a loop!");
+    //delay_us(100000);
 }
 
 
