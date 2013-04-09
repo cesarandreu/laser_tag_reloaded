@@ -65,9 +65,9 @@ cSRCS_$(d) += libraries/usb.c
 cSRCS_$(d) += libraries/bluetooth.c
 cSRCS_$(d) += libraries/speaker.c
 cSRCS_$(d) += libraries/sender.c
-
-
-
+cSRCS_$(d) += libraries/HardWireL.c
+cSRCS_$(d) += libraries/WireBaseL.c
+cSRCS_$(d) += libraries/GPS.c
 
 # cppSRCS_$(d) are the C++ sources we want compiled.  We have our own
 # main.cpp, and one additional file.
