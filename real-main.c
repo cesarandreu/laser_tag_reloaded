@@ -16,7 +16,7 @@ char currentChar = 'a';
 
 void pushButton(void){
     sender_shoot();
-    speaker_playHit();
+    speaker_playShoot();
 }
 
 // setup() and loop():
@@ -24,6 +24,7 @@ void setup(void) {
     bluetooth_start();
     speaker_start();
     sender_start();
+    sender_setPlayerCode(8);
     receiver_start();
 
     //Onboard button

@@ -73,7 +73,7 @@ void listenSignal(void){
     
     bluetooth_printString(pNum);
 
-    if(playerNumber==36){
+    if(playerNumber==8){
       speaker_playHit();
     }
 
