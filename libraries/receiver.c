@@ -73,12 +73,14 @@ void listenSignal(void){
     
     bluetooth_printString(pNum);
 
+    
+    nvic_globalirq_enable();
+
     if(playerNumber==8){
       speaker_playHit();
     }
 
     //usb_printChar('R');
-    nvic_globalirq_enable();
     //exti_attach_interrupt(AFIO_EXTI_15, AFIO_EXTI_PC, listenSignal, EXTI_FALLING);
 
 }
