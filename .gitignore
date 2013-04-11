@@ -31,3 +31,5 @@
 *.a
 
 /build
+
+real-main.c
