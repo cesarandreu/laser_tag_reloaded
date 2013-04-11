@@ -16,8 +16,10 @@ void setup(void) {
 }
 
 void loop(void) {
+    while(gps_hasFix() == 0)
+        usb_printlnString("No Coordinates Available");
     if(gps_available())
-        usb.writeChar(gps_read());
+        usb_writeChar(gps_read());
     if(usb_available())
         gps_write(usb_read());
 }

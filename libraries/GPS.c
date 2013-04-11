@@ -27,6 +27,7 @@
 
 
 #include "GPS.h"
+#include "usb.h"
 
 #define GPS_BAUD 9600
 #define GPS_USART USART1
@@ -72,7 +73,7 @@ uint8 gps_read(void){
 int gps_readString(char *str, int length){
     char c = ' ';
     int i = 0;
-    while(c != '\n' || i < length)
+    while(c != '\n' && i < length-1)
     {
         c = gps_read();
         str[i++] = c;
@@ -84,7 +85,7 @@ void gps_readMessage(char *str){
     char c = ' ';
     int i = 0;
     while(gps_read() != '$');
-    while(c != '\n' || i < NMEA_MAX_MESSAGE_LENGTH)
+    while(c != '\n' && i < NMEA_MAX_MESSAGE_LENGTH-1)
     {
         c = gps_read();
         str[i++] = c;
@@ -96,21 +97,29 @@ void gps_write(unsigned char ch){
 }
 
 uint8 gps_hasFix(void){
-    char str[5];
-    while(gps_read() != '$' && gps_readString(str, 5) && strcmp(str, "GPRMC") == 0);
+    char str[6] = "     ";
+    while(1){
+        if(gps_read() == '$'){
+            gps_readString(str, 6);
+            //usb_printlnString(str);
+            if(strcmp(str, "GPRMC") == 0){
+                //usb_printlnString("yes");
+                break;
+            }
+        }
+    }
+    //usb_printlnString("out");
     //Check for new GPS line, then check for GPRMC, then check for valid fix flag, if valid true, if invalid false
     int i;
-    for(i=0; i < 11; i++){
+    for(i=0; i < 12; i++){
         gps_read();
+        //usb_printlnChar(gps_read());
     }
     char flag = gps_read();
+    //usb_printlnChar(flag);
     if(flag == 'V')
         return 0;
     else
         return 1;
     //TODO: Do I want to read the rest of the message to clear it from buffer?
 }
-
-
-
-
