@@ -69,6 +69,7 @@ cSRCS_$(d) += libraries/receiver.c
 cSRCS_$(d) += libraries/HardWireL.c
 cSRCS_$(d) += libraries/WireBaseL.c
 cSRCS_$(d) += libraries/GPS.c
+cSRCS_$(d) += libraries/fuelGauge.c
 
 
 

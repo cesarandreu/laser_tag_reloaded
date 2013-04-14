@@ -45,9 +45,10 @@ void gps_end(void);
 uint32 gps_available(void);
 uint8 gps_read(void);
 int gps_readString(char *str, int length);
-void gps_readMessage(char *str);
+void gps_readMessage(char *str, int length);
 void gps_write(unsigned char ch);
 uint8 gps_hasFix(void);
+void getLocation(char *str, int length);
 
 #ifdef __cplusplus
 }
