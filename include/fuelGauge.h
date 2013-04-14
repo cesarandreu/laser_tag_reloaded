@@ -20,37 +20,31 @@
   manipulate the voltage values.
 */
 
-#include "fuelGauge.h"
-#include "initialize.h"
-#include "usb.h"
+#ifndef _FUELGAUGE_H_
+#define _FUELGAUGE_H_
 
-// Standard libmaple init() and main.
-//
-// The init() part makes sure your board gets set up correctly. It's
-// best to leave that alone unless you know what you're doing. main()
-// is the usual "call setup(), then loop() forever", but of course can
-// be whatever you want.
+/* Conditional extern "C" so we're safe to call from C++ files */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-__attribute__((constructor)) void premain() {
-    init();
+#include <libmaple/gpio.h>
+#include <libmaple/delay.h>
+#include <libmaple/libmaple.h>
+#include <stdio.h>
+
+#include "HardWireL.h"
+#include "WireBaseL.h"
+
+#define MAX17043_ADDRESS 0x36  // R/W =~ 0x6D/0x6C
+
+void gauge_start(uint8 percent);
+void gauge_alert(void);
+void gauge_voltage(char *str, int length);
+void gauge_percent(char *str, int length);
+
+#ifdef __cplusplus
 }
+#endif
 
-int main(){
-  usb_start();
-
-  gauge_start(32);
-  
-  while(1){
-
-    char str[10];
-    gauge_voltage(str, 10);
-    usb_printString(str); // Print the battery percentage
-    usb_printlnString(" %");
-    gauge_percent(str, 10);
-    usb_printString(str);
-    usb_printlnString(" V");
-    usb_println();
-    delay_us(1000000);
-  }
-  return 0;
-}
+#endif 

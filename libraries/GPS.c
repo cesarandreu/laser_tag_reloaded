@@ -27,7 +27,6 @@
 
 
 #include "GPS.h"
-#include "usb.h"
 
 #define GPS_BAUD 9600
 #define GPS_USART USART1
@@ -40,6 +39,9 @@
 
 #define NMEA_MAX_MESSAGE_LENGTH 82
 
+//To consider: Implement Cold/Hot start functions?
+//Idea for cold start, start and wait for coords or 30 seconds, whichever comes first.
+//Might be better to separate wait to avoid blocking and allow startup for other components simultaneously.
 void gps_start(void){
     usart_config_gpios_async(GPS_USART, GPS_PORT_RX, GPS_PIN_RX, GPS_PORT_TX, GPS_PIN_TX, 0);
     usart_init(GPS_USART);
@@ -81,7 +83,13 @@ int gps_readString(char *str, int length){
     return i;
 }
 
-void gps_readMessage(char *str){
+//Return 0 if string is invalid size
+//Return 1 if valid string is sent
+uint8 gps_readMessage(char *str, int length){
+    if(length < NMEA_MAX_MESSAGE_LENGTH+1)
+    {
+        return 0;
+    }
     char c = ' ';
     int i = 0;
     while(gps_read() != '$');
@@ -90,10 +98,54 @@ void gps_readMessage(char *str){
         c = gps_read();
         str[i++] = c;
     }
+    return 1;
 }
 
 void gps_write(unsigned char ch){
     usart_putc(GPS_USART, ch);
+}
+
+//Get GPS coordinates
+//Currently using an SW-side loop to determine timeout, may want to use timers in the future
+//Returns 0 if location was not found or if the incoming string's length is of invalid size (Should I differentiate these?)
+//Returns 1 if location was found
+//The resulting string will be formatted as xxmm.dddd,<N|S>,yyymm.dddd,<E|W>
+int gps_getLocation(char *str, int length){
+    //If the string's length is not 12 (+1 for string end character), return 0
+    if(length != 12+1)
+        return 0;
+
+    gps_start();
+    //Wait for the GPS to get a fix if available, if it does not after x time, return 0
+    //TODO: Make this a timer-based implementation
+    waitCount = 0;
+    while(gps_hasFix() == 0 && waitCount < 20)
+        waitCount++;
+    if(waitCount == 20)
+        return 0;
+
+
+    //Find the string that contains the coordinates from the GPS output
+    char str[6] = "     ";
+    while(1){
+        if(gps_read() == '$'){
+            gps_readString(str, 6);
+            if(strcmp(str, "GPRMC") == 0){
+                break;
+            }
+        }
+    }
+
+    //Scan the string until the beginning of the coordinates portion
+    int i;
+    for(i=0; i < 14; i++){
+        gps_read();
+    }
+
+    //Read the coordinates, store the in str and return 1
+    gps_readString(str, 12);
+    gps_end();
+    return 1;
 }
 
 uint8 gps_hasFix(void){
@@ -101,22 +153,17 @@ uint8 gps_hasFix(void){
     while(1){
         if(gps_read() == '$'){
             gps_readString(str, 6);
-            //usb_printlnString(str);
             if(strcmp(str, "GPRMC") == 0){
-                //usb_printlnString("yes");
                 break;
             }
         }
     }
-    //usb_printlnString("out");
     //Check for new GPS line, then check for GPRMC, then check for valid fix flag, if valid true, if invalid false
     int i;
     for(i=0; i < 12; i++){
         gps_read();
-        //usb_printlnChar(gps_read());
     }
     char flag = gps_read();
-    //usb_printlnChar(flag);
     if(flag == 'V')
         return 0;
     else

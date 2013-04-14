@@ -1,4 +1,4 @@
-#maple_mini_c
+#Laser Tag Reloaded
 
 ---
 
@@ -19,6 +19,6 @@ Not all functions have been tested. All files in the Tests folder are proven to 
 ###Libraries
 
 * **initialize.h** - Initializes all the board's peripherals.
-* **usb.h - Allows** you to communicate serially using the USB cable.
+* **usb.h - Allows you to communicate serially using the USB cable.
 * **bluetooth.h** - Allows to communicate using a bluetooth module.
 * **speaker.h** - Allows you to play a hit or shoot sound from a speaker.
