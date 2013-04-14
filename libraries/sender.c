@@ -5,12 +5,25 @@
 #include <libmaple/nvic.h>
 #include <libmaple/libmaple.h>
 
-#define DEFAULT_PLAYER_CODE 8
+#define DEFAULT_PLAYER_CODE 1
 #define SENDER_PORT GPIOC
 #define SENDER_PIN 14
 
+//Comment out one and leave the other depending on which frequency you wish to use. 
+//#define _38KHZ
+#define _56KHZ
 
-uint8 playerCode;
+#ifdef _56KHZ 
+  #define SEND_DELAY 6
+  #define TOTAL_DELAY 18
+#endif
+
+#ifdef _38KHZ
+  #define SEND_DELAY 10
+  #define TOTAL_DELAY 26
+#endif
+
+uint8 playerCode = DEFAULT_PLAYER_CODE;
 
 
 void sender_pulseIR(long microsecs){
@@ -19,15 +32,15 @@ void sender_pulseIR(long microsecs){
    // 38 kHz is about 13 microseconds high and 13 microseconds low
    gpio_write_bit(SENDER_PORT, SENDER_PIN, 1);
    // this takes about 3 microseconds to happen
-   delay_us(10);
+   delay_us(SEND_DELAY);
    // waits 10 microseconds
    gpio_write_bit(SENDER_PORT, SENDER_PIN, 0);
    // this also takes about 3 microseconds
-   delay_us(10);
+   delay_us(SEND_DELAY);
    // waits 10 microseconds
  
    // so 26 microseconds altogether
-   microsecs -= 26;
+   microsecs -= TOTAL_DELAY;
   }
 
 }
@@ -56,9 +69,9 @@ uint8 sender_getPlayerCode(void){
     return playerCode;
 }
 
-void sender_start(void){
+void sender_start(int pCode){
     gpio_set_mode(SENDER_PORT, SENDER_PIN, GPIO_OUTPUT_PP);
-    sender_setPlayerCode(DEFAULT_PLAYER_CODE);
+    sender_setPlayerCode(pCode);
 }
 
 void sender_sendCode(uint8 code){

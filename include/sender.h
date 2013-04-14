@@ -17,7 +17,7 @@ void sender_sendOneLow(void);
 void sender_sendZeroLow(void);
 void sender_setPlayerCode(uint8);
 uint8 sender_getPlayerCode(void);
-void sender_start(void);
+void sender_start(int);
 
 
 #ifdef __cplusplus

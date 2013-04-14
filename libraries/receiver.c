@@ -64,14 +64,17 @@ int listenForIR(void) {
 
 void listenSignal(void){
     //exti_detach_interrupt(AFIO_EXTI_15);
+    
+    if(gpio_read_bit(RECEIVER_PORT, RECEIVER_PIN) == 0){
+    
     nvic_globalirq_disable();
     //gpio_toggle_bit(GPIOB, 1);
     numberPulses = listenForIR();
     playerNumber = interpretCode();
-    char pNum[40] = {'0'};
-    sprintf(pNum, "Num is: %d , numpulse is: %d", playerNumber, numberPulses);
+    //char pNum[40] = {'0'};
+    //sprintf(pNum, "Num is: %d , numpulse is: %d", playerNumber, numberPulses);
     
-    bluetooth_printString(pNum);
+    //bluetooth_printString(pNum);
 
     
     nvic_globalirq_enable();
@@ -82,7 +85,9 @@ void listenSignal(void){
 
     //usb_printChar('R');
     //exti_attach_interrupt(AFIO_EXTI_15, AFIO_EXTI_PC, listenSignal, EXTI_FALLING);
-
+        
+    }
+        
 }
 
 uint8 interpretCode(void){
