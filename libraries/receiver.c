@@ -1,4 +1,3 @@
-
 #include "receiver.h"
 #include "bluetooth.h"
 #include "speaker.h"
@@ -59,6 +58,9 @@ int listenForIR(void) {
  
     // we read one high-low pulse successfully, continue!
     currentPulse++;
+    if (currentPulse>5){
+      return 0;
+    }
   }
 }
 
