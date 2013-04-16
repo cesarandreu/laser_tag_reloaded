@@ -34,8 +34,8 @@
 
 #define SPEAKER_PORT GPIOB
 #define SPEAKER_PIN 0
-#define SPEAKER_TIMER TIMER2
-#define SPEAKER_CHANNEL TIMER_CH1
+#define SPEAKER_TIMER TIMER3
+#define SPEAKER_CHANNEL TIMER_CH3
 #define SPEAKER_COMPARE 1
 
 //Value by which the count is modded to increase the period
@@ -57,8 +57,8 @@
 
 
 //Speaker variables
-int count;
-int period;
+int count = 0;
+unsigned int period = 0;
 
 
 void speaker_pause(void){
@@ -147,10 +147,26 @@ void speaker_toggle(void){
     gpio_toggle_bit(SPEAKER_PORT, SPEAKER_PIN);
 }
 
+/*
 void speaker_shoot(void){
     count++;
     speaker_toggle();
-    if(count > MAX_COUNT_SHOOT){
+    if(count >= MAX_COUNT_SHOOT){
+        speaker_pause();
+        speaker_detachInterrupt(SPEAKER_CHANNEL);
+        gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
+    } else if( count % SPEAKER_SHOOT_MOD == 0 ){
+        period += SPEAKER_SHOOT_INCREASE;
+        speaker_setPeriod(period);
+        speaker_refresh();
+    }
+}
+*/
+
+void speaker_shoot(void){
+    count++;
+    speaker_toggle();
+    if(count >= MAX_COUNT_SHOOT){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
@@ -164,17 +180,17 @@ void speaker_shoot(void){
 void speaker_hit(void){
     count++;
     speaker_toggle();
-    if(count > MAX_COUNT_HIT){
+    if(count >= MAX_COUNT_HIT){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
     } else if( count % SPEAKER_HIT_MOD == 0 ){
-        //period += (SPEAKER_HIT_PERIOD/1);
         period += SPEAKER_HIT_INCREASE;
         speaker_setPeriod(period);
         speaker_refresh();
     }
 }
+
 
 void speaker_playHit(void){
     count = 0;

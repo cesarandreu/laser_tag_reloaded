@@ -160,6 +160,7 @@ static void board_setup_gpio(void) {
 }
 
 static void timer_default_config(timer_dev *dev) {
+    /*
     timer_adv_reg_map *regs = (dev->regs).adv;
     const uint16 full_overflow = 0xFFFF;
     const uint16 half_duty = 0x8FFF;
@@ -193,10 +194,12 @@ static void timer_default_config(timer_dev *dev) {
 
     timer_generate_update(dev);
     timer_resume(dev);
+    */
 }
 
 static void setup_timers(void) {
-    timer_foreach(timer_default_config);
+    //timer_foreach(timer_default_config);
+    timer_init_all();
 }
 
 static void board_setup_usb(void) {
