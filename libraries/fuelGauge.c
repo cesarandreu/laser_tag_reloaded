@@ -31,18 +31,6 @@ float batVoltage;
 float batPercentage;
 int alertStatus;
 
-void gauge_start(uint8 percent)
-{
-  i2c_HardWireLEnable(1, 0);
-  i2c_begin();  // Start I2C
-  delay_us(100000);
-  configMAX17043(percent);  // Configure the MAX17043's alert percentage
-  qsMAX17043();  // restart fuel-gauge calculations
-
-  //TODO: Set interrupt here and determine pin to connect gauge alert
-  //FIXFIXFIXgpio_set_mode(GPIOA, 1, GPIO_INPUT_PP);
-}
-
 void gauge_alert(void)
 {
   //TODO: Determine what to do when battery is low.
@@ -153,4 +141,16 @@ to reduce the error.
 void qsMAX17043()
 {
   i2cWrite16(0x4000, 0x06);  // Write a 0x4000 to the MODE register
+}
+
+void gauge_start(uint8 percent)
+{
+  i2c_HardWireLEnable(1, 0);
+  i2c_begin();  // Start I2C
+  delay_us(100000);
+  configMAX17043(percent);  // Configure the MAX17043's alert percentage
+  qsMAX17043();  // restart fuel-gauge calculations
+
+  //TODO: Set interrupt here and determine pin to connect gauge alert
+  //FIXFIXFIXgpio_set_mode(GPIOA, 1, GPIO_INPUT_PP);
 }
