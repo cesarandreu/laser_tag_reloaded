@@ -118,7 +118,7 @@ int gps_getLocation(char *str, int length){
     gps_start();
     //Wait for the GPS to get a fix if available, if it does not after x time, return 0
     //TODO: Make this a timer-based implementation
-    waitCount = 0;
+    int waitCount = 0;
     while(gps_hasFix() == 0 && waitCount < 20)
         waitCount++;
     if(waitCount == 20)
@@ -126,11 +126,11 @@ int gps_getLocation(char *str, int length){
 
 
     //Find the string that contains the coordinates from the GPS output
-    char str[6] = "     ";
+    char tmp_str[13] = "            ";
     while(1){
         if(gps_read() == '$'){
-            gps_readString(str, 6);
-            if(strcmp(str, "GPRMC") == 0){
+            gps_readString(tmp_str, 6);
+            if(strcmp(tmp_str, "GPRMC") == 0){
                 break;
             }
         }
@@ -143,8 +143,9 @@ int gps_getLocation(char *str, int length){
     }
 
     //Read the coordinates, store the in str and return 1
-    gps_readString(str, 12);
+    gps_readString(tmp_str, 12);
     gps_end();
+    strcpy(str, tmp_str);
     return 1;
 }
 
