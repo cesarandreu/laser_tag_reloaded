@@ -26,11 +26,11 @@
 
 
 #include "speaker.h"
+#include "initialize.h"
 #include <libmaple/libmaple.h>
 #include <libmaple/rcc.h>
 #include <libmaple/timer.h>
 #include <libmaple/gpio.h>
-#include "initialize.h"
 
 #define SPEAKER_PORT GPIOB
 #define SPEAKER_PIN 0

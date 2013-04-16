@@ -1,5 +1,4 @@
 #include "receiver.h"
-#include "bluetooth.h"
 #include "speaker.h"
 #include <libmaple/libmaple.h>
 #include <libmaple/exti.h>
