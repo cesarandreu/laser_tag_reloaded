@@ -1,6 +1,5 @@
 #include "player.h"
 
-
 int code = DEFAULT_PLAYER_CODE;
 unsigned int shotsFired = DEFAULT_SHOTS_FIRED;
 
