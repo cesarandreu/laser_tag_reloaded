@@ -9,7 +9,11 @@ void player_start(int pCode){
 }
 
 void player_shoot(void){
-    shotsFired++;
+    //Checks if the number of shots fired is below 1 million. At one million shots it stops increasing.
+    //If you shoot one million times in one game... You have problems. 
+    if(shotsFired<1000000){
+        shotsFired++;       
+    }
 }
 
 unsigned int player_getShots(void){

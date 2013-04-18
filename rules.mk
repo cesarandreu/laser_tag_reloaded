@@ -71,6 +71,7 @@ cSRCS_$(d) += libraries/WireBaseL.c
 cSRCS_$(d) += libraries/GPS.c
 cSRCS_$(d) += libraries/fuelGauge.c
 cSRCS_$(d) += libraries/player.c
+cSRCS_$(d) += libraries/communication.c
 
 
 

@@ -1,0 +1,273 @@
+
+
+
+#include "communication.h"
+
+
+//================================================================
+// HOW DATA IS ENCODED TO BE SENT TO THE PHONE
+// Must include a space ' ' at the end of the string.
+// This is because of the way the interrupts are handled.
+//================================================================
+//Data acknowledge - #A,XXX,#
+// Example: #A,128,#
+// A   - Data acknowedleged
+// XXX - hit number that was saved.
+
+//Game end - #O,X,# 
+// Example: #O,1,#
+// O  - Game Over
+// X  - If you won or not (1 TRUE, 0 FALSE)
+
+//Game information - #I,A,Y1,00,X,X1,X2,X3,X4,X5,X6,X7,X8,# 
+//Example: #I,A,128,10,2,5,10,# 
+// I  - Game Info
+// X  - Game Type (A = First to X Kills, B = Timed Deathmatch)
+// Y1 - Player number
+// 00 - Maximum number of kills/minutes
+// X  - Number of enemies
+// X1 - Enemy 1
+// X2 - Enemy 2
+// ...
+// #  - End
+
+//Game start - #S,#
+// Example: #S,#
+// S  - Game Start 
+//================================================================
+
+//To each receive_gameFUNCTION it might be a good idea to add an if at the start.
+//Something like if(receive_endTag - receive_startTag < MINIMUM_ACCEPTED_VALUE_FOR_FUNC) return;
+
+//Variables related to receiving something
+//========================================
+#define BUFFER_SIZE 128
+#define CHAR_MAX 4
+char receive_buffer[BUFFER_SIZE] = {' '};
+int receive_position = 1;
+int receive_startTag = 0;
+int receive_endTag = 0;
+char receive_nextChar[CHAR_MAX] = {' '};
+
+int receive_getNext(int position){
+    int counter = 0;
+    int i = 0;
+
+    for(i=0; i<CHAR_MAX; i++){
+        receive_nextChar[i] = ' ';
+    }
+    receive_nextChar[CHAR_MAX-1] = '\0';
+
+    while(receive_buffer[position]!=','){
+        receive_nextChar[counter] = receive_buffer[position];
+        position++;
+        counter++;
+    } 
+
+    return position+1;
+}
+
+int receive_parseInt(void){
+    return strtol(receive_nextChar, NULL, 10);  
+
+}
+
+void receive_gameOver(void){
+    int gameResult = 0;
+    int value = receive_startTag + 3;
+    value = receive_getNext(value);
+    gameResult = receive_parseInt();
+
+    //Testing:
+    char myString[100] = {' '};
+    sprintf(myString, "\n %d result - game over!", gameResult);
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+
+    //Some function to respond to the phone saying that the game has ended.
+
+    if(gameResult==1){
+        //Play winning sound
+        //Do something to show game was won.
+    } else { 
+        //Play lose sound
+        //Do something to show game was lost.
+    }
+}
+
+//#I,A,16,10,1,128,#
+//Game information - #I,T,Y1,X1,X2,X3,X4,X5,X6,X7,X8,# 
+// I  - Game Info
+// T  - Game Type (A = First to X Kills, B = Timed Deathmatch)
+// Y1 - Player number
+// 00 - Maximum number of kills/minutes
+// X  - Number of enemies
+// X1 - Enemy 1
+// X2 - Enemy 2
+// ...
+// #  - End
+void receive_gameInformation(void){
+    int value = receive_startTag + 3;
+    int received_playerNumber = 0;
+    char received_gameType = ' ';
+    int received_gameLimit = 0;
+    int received_enemyNumber = 0;
+
+    //Gets the game type.
+    //A = First to X Kills.
+    //B = Timed Deathmatch
+    value = receive_getNext(value);
+    received_gameType = receive_nextChar[0];
+
+    //Gets your player number.
+    value = receive_getNext(value);
+    received_playerNumber = receive_parseInt();
+
+    //Gets the limiting factor of the game.
+    //If A, kill limit.
+    //If B, time limit.
+    value = receive_getNext(value);
+    received_gameLimit = receive_parseInt();
+
+    //Gets the number of enemies.
+    value = receive_getNext(value);
+    received_enemyNumber = receive_parseInt();
+
+    /*
+    int i=0;
+    while(i<received_enemyNumber){
+        i++;
+        value = receive_getNext(value);
+
+        //Some function to store the enemy number
+        //enemy_store(receive_parseInt());
+    }
+    */
+    
+
+    //Some functions to save the game data
+    // player_init(received_playerNumber);
+    // 
+    //Some function that responds to the micro saying that the game info was saved
+
+
+    //Testing:
+    value = receive_getNext(value);
+    int enemy = receive_parseInt();
+    char myString[256] = {' '};
+    sprintf(myString, "\n %c Game Type, %d Player Number, %d Game Limit, %d Enemy Limit, %d Enemy \n", received_gameType, received_playerNumber, received_gameLimit, received_enemyNumber, enemy);
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+
+
+}
+
+void receive_gameAcknowledge(void){
+    int numberAcknowledged = 0;
+    int value = receive_startTag + 3; 
+    value = receive_getNext(value);
+    numberAcknowledged = receive_parseInt();
+
+    //Remove acknowledged number
+    //storage_acknowledgeNumber(numberAcknowledged);
+    //Some function that responds to the micro saying that the number has been removed.
+
+    //Testing:
+    char myString[100] = {' '};
+    sprintf(myString, "\n %d number acknowledged!", numberAcknowledged);
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+
+}
+
+void receive_gameStart(void){
+    //Function that makes the game start. 
+    //Some function that responds to the micro saying that the game started.
+
+    //Testing:
+    char myString[100] = "Game start!";
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+
+}
+
+void receive_processString(void){
+    char receive_messageType = ' ';
+
+    if(receive_buffer[receive_startTag]!='#'){
+        return;
+    } 
+
+    if(receive_buffer[receive_endTag]!='#'){
+        return; 
+    }
+
+
+    receive_messageType = receive_buffer[receive_startTag+1];
+
+    switch(receive_messageType){
+        case 'S':
+            receive_gameStart();
+            break;
+        case 'A':
+            receive_gameAcknowledge();
+            break;
+        case 'O':
+            receive_gameOver();
+            break;
+        case 'I':
+            receive_gameInformation();
+            break;
+        default:
+            break;
+    }
+
+    //Resets the start and end tags. Sets the position to 1. 
+    int i = 0;
+    for(i=0; i<BUFFER_SIZE; i++){
+        receive_buffer[i] = ' ';
+    }
+    receive_buffer[BUFFER_SIZE-1] = '\0';
+    receive_startTag = 0;
+    receive_endTag = 0;
+    receive_position = 1;
+
+}
+
+void received_bluetooth(void){
+    if(!bluetooth_available()){
+        return;
+    }
+
+    while(bluetooth_available()){
+        receive_buffer[receive_position] = bluetooth_read();
+        if(receive_buffer[receive_position]=='#'){
+            if(receive_startTag){
+                receive_endTag=receive_position;
+                break; 
+            } else {
+                receive_startTag=receive_position;
+            }
+        }
+        receive_position++;
+    }
+
+    if(receive_startTag!=0 && receive_endTag!=0){
+        receive_processString();
+    }
+}
+
+
+void communication_start(void){
+    bluetooth_start();
+    exti_attach_interrupt(BLUETOOTH_AFIO_EXTI_PIN, BLUETOOTH_AFIO_EXTI_PORT, received_bluetooth, EXTI_RISING);
+
+}
+
+
+
+
+
+
+
+

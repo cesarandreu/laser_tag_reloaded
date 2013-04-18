@@ -35,6 +35,19 @@ extern "C" {
 #endif
 
 #include <libmaple/libmaple.h>
+#include <libmaple/gpio.h>
+#include <libmaple/timer.h>
+#include <libmaple/usart.h>
+
+#define BLUETOOTH_BAUD 115200
+#define BLUETOOTH_USART USART2
+#define BLUETOOTH_PORT_TX GPIOA
+#define BLUETOOTH_PORT_RX GPIOA
+#define BLUETOOTH_PIN_TX 2
+#define BLUETOOTH_PIN_RX 3
+#define BLUETOOTH_AFIO_EXTI_PIN AFIO_EXTI_3
+#define BLUETOOTH_AFIO_EXTI_PORT AFIO_EXTI_PA 
+
 
 void bluetooth_start(void);
 void bluetooth_end(void);

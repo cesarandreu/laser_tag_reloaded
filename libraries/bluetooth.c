@@ -27,17 +27,6 @@
 
 
 #include "bluetooth.h"
-#include <libmaple/libmaple.h>
-#include <libmaple/gpio.h>
-#include <libmaple/timer.h>
-#include <libmaple/usart.h>
-
-#define BLUETOOTH_BAUD 115200
-#define BLUETOOTH_USART USART2
-#define BLUETOOTH_PORT_TX GPIOA
-#define BLUETOOTH_PORT_RX GPIOA
-#define BLUETOOTH_PIN_TX 2
-#define BLUETOOTH_PIN_RX 3
 
 void bluetooth_start(void){
     usart_config_gpios_async(BLUETOOTH_USART, BLUETOOTH_PORT_RX, BLUETOOTH_PIN_RX, BLUETOOTH_PORT_TX, BLUETOOTH_PIN_TX, 0);
