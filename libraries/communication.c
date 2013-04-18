@@ -33,7 +33,12 @@
 
 //Game start - #S,#
 // Example: #S,#
-// S  - Game Start 
+// S  - Game Start
+
+//New  game - #N,#
+// Example: #N,#
+// N - New game
+
 //================================================================
 
 //To each receive_gameFUNCTION it might be a good idea to add an if at the start.
@@ -72,6 +77,16 @@ int receive_parseInt(void){
 
 }
 
+void receive_gameNew(void){
+    //Function that makes the micro reset everything for a new game.
+    //Some function that responds to the micro saying that you've started a new game state.
+    
+    //Testing:
+    char myString[100] = "Game new!";
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+}
+
 void receive_gameOver(void){
     int gameResult = 0;
     int value = receive_startTag + 3;
@@ -95,17 +110,6 @@ void receive_gameOver(void){
     }
 }
 
-//#I,A,16,10,1,128,#
-//Game information - #I,T,Y1,X1,X2,X3,X4,X5,X6,X7,X8,# 
-// I  - Game Info
-// T  - Game Type (A = First to X Kills, B = Timed Deathmatch)
-// Y1 - Player number
-// 00 - Maximum number of kills/minutes
-// X  - Number of enemies
-// X1 - Enemy 1
-// X2 - Enemy 2
-// ...
-// #  - End
 void receive_gameInformation(void){
     int value = receive_startTag + 3;
     int received_playerNumber = 0;
@@ -217,6 +221,9 @@ void receive_processString(void){
             break;
         case 'I':
             receive_gameInformation();
+            break;
+        case 'N':
+            receive_gameNew();
             break;
         default:
             break;
