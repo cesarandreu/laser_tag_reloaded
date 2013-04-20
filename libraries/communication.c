@@ -4,6 +4,7 @@
 #include "communication.h"
 
 
+
 //================================================================
 // HOW DATA IS ENCODED TO BE SENT TO THE PHONE
 // Must include a space ' ' at the end of the string.
@@ -76,14 +77,21 @@ int receive_parseInt(void){
     return strtol(receive_nextChar, NULL, 10);  
 }
 
+
+/*************************************
+* Some processing logic is below here. 
+* Here is how we decide what we do when we receive stuff.
+* This could blow up if the string is structured as expected.
+**************************************/
+
 void receive_gameNew(void){
     //Function that makes the micro reset everything for a new game.
     //Some function that responds to the micro saying that you've started a new game state.
     
     //Testing:
-    char myString[100] = "Game new!";
+/*    char myString[100] = "Game new!";
     bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);
+    gpio_toggle_bit(GPIOB, 1);*/
 }
 
 void receive_gameOver(void){
@@ -98,9 +106,10 @@ void receive_gameOver(void){
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);*/
 
-    //Some function to respond to the phone saying that the game has ended.
-
-    if(gameResult==1){
+    //Some function to respond to the phone saying that the phone has acknowledged that the game has ended.
+    if(gameResult==2){
+        //If it's a TWO it means the game was quit or something else happened.
+    } else if(gameResult==1){
         //Play winning sound
         //Do something to show game was won.
     } else { 
@@ -138,20 +147,21 @@ void receive_gameInformation(void){
 
     
     int i=0;
-    while(i<received_enemyNumber){
+    //The MAXIMUM_NUMBER_ENEMIES variable is taken from enemies.h
+    while(i<received_enemyNumber && i<=MAXIMUM_NUMBER_ENEMIES){
         i++;
         value = receive_getNext(value);
 
-        //Some function to store the enemy number
-        //enemy_store(receive_parseInt());
+        //This function adds the number to the list of potential enemies. 
+        enemy_addEnemy(receive_parseInt());
     }
     
     
 
-    //Some functions to save the game data
-    // player_init(received_playerNumber);
-    // 
-    //Some function that responds to the micro saying that the game info was saved
+    //Functions to save the player data
+    player_start(received_playerNumber);
+    
+    //Function that responds to the micro saying that the game info was saved
 
 
     //Testing:
@@ -172,8 +182,10 @@ void receive_gameAcknowledge(void){
     numberAcknowledged = receive_parseInt();
 
     //Remove acknowledged number
-    //storage_acknowledgeNumber(numberAcknowledged);
-    //Some function that responds to the micro saying that the number has been removed.
+    storage_removeHit(numberAcknowledged);
+
+    //Function that responds to the micro saying that the number has been removed.
+
 
     //Testing:
 /*    char myString[100] = {' '};
@@ -185,7 +197,9 @@ void receive_gameAcknowledge(void){
 
 void receive_gameStart(void){
     //Function that makes the game start. 
-    //Some function that responds to the micro saying that the game started.
+
+    //Function that responds to the micro saying that the game started.
+
 
     //Testing:
 /*    char myString[100] = "Game start!";

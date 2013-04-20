@@ -9,6 +9,9 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include "bluetooth.h"
+#include "storage.h"
+#include "enemy.h"
+#include "player.h"
 
 void communication_start(void);
 
