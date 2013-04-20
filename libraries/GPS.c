@@ -31,11 +31,14 @@
 #define GPS_BAUD 9600
 #define GPS_USART USART1
 #define GPS_PORT_TX GPIOA
-#define GPS_PORT_RX GPIOA
 #define GPS_PIN_TX 9
+#define GPS_PORT_RX GPIOA
 #define GPS_PIN_RX 10
 
 #define GPS_VDD 8
+
+//GPS Coordinate Message Length (Including Null-Termination Character)
+#define GPS_COORDINATE_LENGTH 25
 
 #define NMEA_MAX_MESSAGE_LENGTH 82
 
@@ -110,6 +113,8 @@ void gps_write(unsigned char ch){
 //Returns 0 if location was not found or if the incoming string's length is of invalid size (Should I differentiate these?)
 //Returns 1 if location was found
 //The resulting string will be formatted as xxmm.dddd,<N|S>,yyymm.dddd,<E|W>
+//The resulting string size will contain 24 characters.
+//TODO: Null termination of String '\0'
 int gps_getLocation(char *str, int length){
     //If the string's length is not 12 (+1 for string end character), return 0
     if(length != 12+1)

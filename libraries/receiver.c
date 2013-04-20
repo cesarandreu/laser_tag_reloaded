@@ -9,11 +9,17 @@
 #define ZERO_DURATION 541
 #define MAXPULSE 8125 // This value is 65000/8 (arbitrarily selected 8).
 #define RESOLUTION 20
-#define RECEIVER_PORT GPIOC
-#define RECEIVER_PIN 13
+//Old
+//#define RECEIVER_PORT GPIOC
+//#define RECEIVER_PIN 13
+#define RECEIVER_PORT GPIOA
+#define RECEIVER_PIN 15
 #define WANTED_PULSES 5
+//Old
 //#define RECEIVER_EXTI_LINE AFIO_EXTI_13
 //#define RECEIVER_EXTI_PORT AFIO_EXTI_PC
+#define RECEIVER_EXTI_LINE AFIO_EXTI_15
+#define RECEIVER_EXTI_PORT AFIO_EXTI_PA
 //#define RECEIVER_DEFAULT_HANDLER receiver_listenSignal
 
 
@@ -75,13 +81,13 @@ void receiver_listenSignal(void){
         
     nvic_globalirq_disable();
 
-    //numberPulses = receiver_listenForIR();
-    //playerNumber = receiver_interpretCode();
+    numberPulses = receiver_listenForIR();
+    playerNumber = receiver_interpretCode();
     //char pNum[40] = {'0'};
     //sprintf(pNum, "Num is: %d , numpulse is: %d", playerNumber, numberPulses);
     
     //bluetooth_printString(pNum);
-    //In theory, sets the player numberto zero if the number of pulses does not fit with criteria.
+    //In theory, sets the player number to zero if the number of pulses does not fit with criteria.
     if((numberPulses > WANTED_PULSES)||(numberPulses < (WANTED_PULSES-1))){
       playerNumber = 0;
     }
@@ -120,8 +126,8 @@ uint8 receiver_interpretCode(void){
 void receiver_start(void){
     //gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
     gpio_set_mode(RECEIVER_PORT, RECEIVER_PIN, GPIO_INPUT_PU);
-    afio_exti_select(AFIO_EXTI_13, AFIO_EXTI_PC);
-    exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PC, receiver_listenSignal, EXTI_FALLING);
+    //afio_exti_select(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT);
+    exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, receiver_listenSignal, EXTI_FALLING);
 
     
 }
