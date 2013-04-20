@@ -18,6 +18,7 @@ typedef struct hit {
     int hitNumber; //Number asociated with a shot
 } hit;
 
+int storage_unsentEntries(void);
 hit storage_getShot(void);
 //void storage_resetEntry(int);
 int storage_removeHit(int);

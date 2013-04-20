@@ -6,7 +6,6 @@
 extern "C" {
 #endif
 
-
 #define DEFAULT_PLAYER_CODE 1
 #define DEFAULT_SHOTS_FIRED 0
 

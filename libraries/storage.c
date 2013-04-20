@@ -21,6 +21,19 @@ hit shot_List[MAXIMUM_NUMBER_HITS] = {0, NULL_TERMINATED_GPS_STRING, 0};
 //This gets looped to zero once it reaches MAXIMUM_NUMBER_HITS-1. 
 int shot_listPosition = 0;
 
+//
+int storage_unsentEntries(void){
+    int counter=0;
+    int i=0;
+    for(i=0; i<MAXIMUM_NUMBER_HITS; i++){
+        if(shot_List[i].ID!=0){
+            counter++;
+        }
+    }
+    return counter;
+
+}
+
 //Checks the whole array for any shots.
 //If any is found then it's returned. Otherwise it returns element zero. 
 hit storage_getShot(void){

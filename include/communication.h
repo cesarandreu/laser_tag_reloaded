@@ -12,6 +12,7 @@ extern "C" {
 #include "storage.h"
 #include "enemy.h"
 #include "player.h"
+#include "game.h"
 
 void communication_start(void);
 void transmit_playerData(int);

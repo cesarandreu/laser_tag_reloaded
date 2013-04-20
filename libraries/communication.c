@@ -1,6 +1,4 @@
 
-
-
 #include "communication.h"
 
 
@@ -145,10 +143,15 @@ void receive_gameNew(void){
     //Some function that responds to the micro saying that you've started a new game state.
     response_new();
 
+    //Does something to start a new game.
+    //game_new();
+
+    /*
     //Testing:
- /* char myString[100] = "Game new!";
+    char myString[100] = "Game new!";
     bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);*/
+    gpio_toggle_bit(GPIOB, 1);
+    */
 
 }
 
@@ -157,14 +160,16 @@ void receive_gameOver(void){
     int value = receive_startTag + 3;
     value = receive_getNext(value);
     gameResult = receive_parseInt();
-
+    
+    /*
     //Testing:
-/*    char myString[100] = {' '};
+    char myString[100] = {' '};
     sprintf(myString, "\n %d result - game over!", gameResult);
     bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);*/
+    gpio_toggle_bit(GPIOB, 1);
+    */
 
-
+    /*
     if(gameResult==2){
         //If it's a TWO it means the game was quit or something else happened.
     } else if(gameResult==1){
@@ -174,9 +179,13 @@ void receive_gameOver(void){
         //Play lose sound
         //Do something to show game was lost.
     }
+    */
 
     //Some function to respond to the phone saying that the phone has acknowledged that the game has ended.
     response_end();
+
+    //Does something now to end the game.
+    //game_end(gameResult);
 
 }
 
@@ -221,7 +230,8 @@ void receive_gameInformation(void){
     
 
     //Functions to save the player data
-    player_start(received_playerNumber);
+    //player_start(received_playerNumber);
+
 
     //Function that responds to the micro saying that the game info was saved
     response_information(received_gameType, received_gameLimit, received_enemyNumber);
@@ -252,25 +262,29 @@ void receive_gameAcknowledge(void){
     //If it wasn't removed for some reson, it'll return zero. 
     response_hitAcknowledged(numberAcknowledged);
 
-
+    /*
     //Testing:
- /* char myString[100] = {' '};
+    char myString[100] = {' '};
     sprintf(myString, "\n %d number acknowledged!", numberAcknowledged);
     bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);*/
+    gpio_toggle_bit(GPIOB, 1);
+    */
 
 }
 
 void receive_gameStart(void){
-    //Function that makes the game start. 
-
     //Function that responds to the micro saying that the game started.
     response_start();
 
+    //Function that makes the game start. 
+    //game_start();
+
+    /*
     //Testing:
- /* char myString[100] = "Game start!";
+    char myString[100] = "Game start!";
     bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);*/
+    gpio_toggle_bit(GPIOB, 1);
+    */
 
 }
 

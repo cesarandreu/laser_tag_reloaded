@@ -4,12 +4,13 @@ int enemyArray[MAXIMUM_NUMBER_ENEMIES] = {0};
 int enemyCount = 0;
 
 //Checks if the enemy is in the list.
-//If it's in the list then it returns 1. Otherwise returns 0.
+//If it's in the list then it returns the enemy number.
+//Otherwise it returns zero.
 int enemy_checkExist(int number){
     int i;
     for(i=0; i<enemyCount; i++){
         if(enemyArray[i]==number){
-            return 1;
+            return enemyArray[i];
         }
     }
     return 0;

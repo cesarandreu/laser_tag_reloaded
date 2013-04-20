@@ -9,13 +9,14 @@ extern "C" {
 #include <libmaple/libmaple.h>
 
 int receiver_listenForIR(void);
-void receiver_listenSignal(void);
+int receiver_listenSignal(void);
 uint8 receiver_interpretCode(void);
 void receiver_start(void);
 void receiver_setInterrupt(voidFuncPtr);
 void receiver_disable(void);
 void receiver_enable(void);
-    
+void receiver_defaultInterrupt(void);
+
 #ifdef __cplusplus
 }
 #endif

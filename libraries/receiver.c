@@ -27,7 +27,11 @@ uint16 pulses[100][2] = {{0}};
 uint8 currentPulse = 0;
 uint8 numberPulses = 0;
 uint8 playerNumber = 1;
-voidFuncPtr handler = receiver_listenSignal;
+voidFuncPtr handler = &receiver_defaultInterrupt;
+
+void receiver_defaultInterrupt(void){
+  receiver_listenSignal();
+}
 
 int receiver_listenForIR(void) {
   
@@ -74,35 +78,27 @@ int receiver_listenForIR(void) {
   }
 }
 
-void receiver_listenSignal(void){
+int receiver_listenSignal(void){
     
     if(gpio_read_bit(RECEIVER_PORT, RECEIVER_PIN) == 0){
     
-        
     nvic_globalirq_disable();
 
     numberPulses = receiver_listenForIR();
     playerNumber = receiver_interpretCode();
-    //char pNum[40] = {'0'};
-    //sprintf(pNum, "Num is: %d , numpulse is: %d", playerNumber, numberPulses);
-    
-    //bluetooth_printString(pNum);
+
+
     //In theory, sets the player number to zero if the number of pulses does not fit with criteria.
     if((numberPulses > WANTED_PULSES)||(numberPulses < (WANTED_PULSES-1))){
       playerNumber = 0;
     }
-
-    playerNumber = 8;
-
-    if(playerNumber==8){
-      speaker_playHit();
-    }
-
-    //usb_printChar('R');
-    //exti_attach_interrupt(AFIO_EXTI_15, AFIO_EXTI_PC, listenSignal, EXTI_FALLING);
         
     nvic_globalirq_enable();
-        
+    
+    return playerNumber;
+
+    } else {
+      return 0;
     }
         
 }
@@ -127,20 +123,20 @@ void receiver_start(void){
     //gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
     gpio_set_mode(RECEIVER_PORT, RECEIVER_PIN, GPIO_INPUT_PU);
     //afio_exti_select(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT);
-    exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, receiver_listenSignal, EXTI_FALLING);
+    exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, handler, EXTI_FALLING);
 
     
 }
 
 
 void receiver_setInterrupt(voidFuncPtr pointer){
-  //handler = pointer;
+  handler = pointer;
 }
 
 void receiver_disable(void){
-  //exti_detach_interrupt(RECEIVER_EXTI_LINE);
+  exti_detach_interrupt(RECEIVER_EXTI_LINE);
 }
 
 void receiver_enable(void){
-    //exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, handler, EXTI_FALLING);
+    exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, handler, EXTI_FALLING);
 }
