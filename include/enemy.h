@@ -11,6 +11,7 @@ extern "C" {
 int enemy_checkExist(int);
 void enemy_addEnemy(int);
 void enemy_reset(void);
+void enemy_start(void);
 
 #ifdef __cplusplus
 }

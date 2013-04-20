@@ -73,6 +73,7 @@ cSRCS_$(d) += libraries/fuelGauge.c
 cSRCS_$(d) += libraries/player.c
 cSRCS_$(d) += libraries/communication.c
 cSRCS_$(d) += libraries/enemy.c
+cSRCS_$(d) += libraries/storage.c
 
 
 
