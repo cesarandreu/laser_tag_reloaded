@@ -27,7 +27,7 @@ void transmit_hitData(hit transmit){
 
 void response_information(char gameType, int gameLimit, int enemyNumber){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'information', gameType: '%c', gameLimit: %d, enemyNumber: %d}", gameType, gameLimit, enemyNumber);
+    sprintf(message, "{type: 'response', response: 'information', gameType: '%c, gameLimit: %d, enemyNumber: %d}", gameType, gameLimit, enemyNumber);
     bluetooth_printString(message);
 }
 
