@@ -14,7 +14,8 @@ extern "C" {
 #include "player.h"
 
 void communication_start(void);
-
+void transmit_playerData(int);
+void transmit_hitData(hit);
 
 #ifdef __cplusplus
 }

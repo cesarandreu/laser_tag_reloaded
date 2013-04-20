@@ -11,8 +11,10 @@
 
 
 //The number assigned with a hit.
-int numberOfHits = 0;
+int numberOfHits = 1;
 
+//Array of shots.
+//All are initialized to zero. 
 hit shot_List[MAXIMUM_NUMBER_HITS] = {0, NULL_TERMINATED_GPS_STRING, 0};
 
 //The position we are in on the array. 
@@ -39,13 +41,17 @@ void storage_resetEntry(int position){
 
 }
 
-void storage_removeHit(int number){
+//Returns the number it removed.
+//If nothing is removed it returns zero. 
+int storage_removeHit(int number){
     int i=0;
     for(i=0; i<MAXIMUM_NUMBER_HITS; i++){
         if(shot_List[i].hitNumber==number){
             storage_resetEntry(i);
+            return number;
         }
     }
+    return 0;
 
 }
 
@@ -63,7 +69,7 @@ void storage_increaseNumberHits(void){
 
 void storage_start(void){
 
-    numberOfHits = 0;
+    numberOfHits = 1;
 
     int i;
     for(i=0; i < MAXIMUM_NUMBER_HITS; i++){

@@ -4,6 +4,60 @@
 #include "communication.h"
 
 
+void transmit_playerData(int shotsFired){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'player', shotsFired: %d}", shotsFired);
+    bluetooth_printString(message);
+
+}
+
+void transmit_hitData(hit transmit){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'hit', id: %d, hitNumber: %d, gps: '%s'}", transmit.ID, transmit.hitNumber, transmit.location);
+    bluetooth_printString(message);
+}
+
+
+// ********* TRANSMIT ENDS HERE **********************************
+
+
+/*****************************************************
+* The MCU's response to the stuff the bluetooth sends.
+******************************************************/
+
+void response_information(char gameType, int gameLimit, int enemyNumber){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'response', response: 'information', gameType: '%c', gameLimit: %d, enemyNumber: %d}", gameType, gameLimit, enemyNumber);
+    bluetooth_printString(message);
+}
+
+void response_hitAcknowledged(int hitNumber){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'response', response: 'hitAcknowledged', hitNumber: %d}", hitNumber);
+    bluetooth_printString(message);
+}
+
+void response_end(void){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'response', response: 'end'}");
+    bluetooth_printString(message);
+
+}
+
+void response_new(void){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'response', response: 'new'}");
+    bluetooth_printString(message);
+}
+
+void response_start(void){
+    char message[128] = { ' ' };
+    sprintf(message, "{type: 'response', response: 'start'}");
+    bluetooth_printString(message);
+}
+
+// ********* RESPONSE ENDS HERE **********************************
+
 
 //================================================================
 // HOW DATA IS ENCODED TO BE SENT TO THE PHONE
@@ -41,6 +95,7 @@
 // N - New game
 
 //================================================================
+
 
 //To each receive_gameFUNCTION it might be a good idea to add an if at the start.
 //Something like if(receive_endTag - receive_startTag < MINIMUM_ACCEPTED_VALUE_FOR_FUNC) return;
@@ -86,12 +141,15 @@ int receive_parseInt(void){
 
 void receive_gameNew(void){
     //Function that makes the micro reset everything for a new game.
+
     //Some function that responds to the micro saying that you've started a new game state.
-    
+    response_new();
+
     //Testing:
-/*    char myString[100] = "Game new!";
+ /* char myString[100] = "Game new!";
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);*/
+
 }
 
 void receive_gameOver(void){
@@ -106,7 +164,7 @@ void receive_gameOver(void){
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);*/
 
-    //Some function to respond to the phone saying that the phone has acknowledged that the game has ended.
+
     if(gameResult==2){
         //If it's a TWO it means the game was quit or something else happened.
     } else if(gameResult==1){
@@ -116,6 +174,10 @@ void receive_gameOver(void){
         //Play lose sound
         //Do something to show game was lost.
     }
+
+    //Some function to respond to the phone saying that the phone has acknowledged that the game has ended.
+    response_end();
+
 }
 
 void receive_gameInformation(void){
@@ -160,12 +222,13 @@ void receive_gameInformation(void){
 
     //Functions to save the player data
     player_start(received_playerNumber);
-    
+
     //Function that responds to the micro saying that the game info was saved
+    response_information(received_gameType, received_gameLimit, received_enemyNumber);
 
 
     //Testing:
-/*    value = receive_getNext(value);
+ /* value = receive_getNext(value);
     int enemy = receive_parseInt();
     char myString[256] = {' '};
     sprintf(myString, "\n %c Game Type, %d Player Number, %d Game Limit, %d Enemy Limit, %d Enemy \n", received_gameType, received_playerNumber, received_gameLimit, received_enemyNumber, enemy);
@@ -181,14 +244,17 @@ void receive_gameAcknowledge(void){
     value = receive_getNext(value);
     numberAcknowledged = receive_parseInt();
 
-    //Remove acknowledged number
-    storage_removeHit(numberAcknowledged);
+    //Remove acknowledged number.
+    //storage_removeHit returns the hitNumber it removed.
+    numberAcknowledged = storage_removeHit(numberAcknowledged);
 
-    //Function that responds to the micro saying that the number has been removed.
+    //Then responds to bluetooth saying it removed it.
+    //If it wasn't removed for some reson, it'll return zero. 
+    response_hitAcknowledged(numberAcknowledged);
 
 
     //Testing:
-/*    char myString[100] = {' '};
+ /* char myString[100] = {' '};
     sprintf(myString, "\n %d number acknowledged!", numberAcknowledged);
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);*/
@@ -199,10 +265,10 @@ void receive_gameStart(void){
     //Function that makes the game start. 
 
     //Function that responds to the micro saying that the game started.
-
+    response_start();
 
     //Testing:
-/*    char myString[100] = "Game start!";
+ /* char myString[100] = "Game start!";
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);*/
 
@@ -277,17 +343,14 @@ void received_bluetooth(void){
     }
 }
 
+// ********* RECEIVE ENDS HERE **********************************
+
 
 void communication_start(void){
     bluetooth_start();
     exti_attach_interrupt(BLUETOOTH_AFIO_EXTI_PIN, BLUETOOTH_AFIO_EXTI_PORT, received_bluetooth, EXTI_RISING);
 
 }
-
-
-
-
-
 
 
 

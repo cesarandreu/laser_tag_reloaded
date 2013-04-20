@@ -20,7 +20,7 @@ typedef struct hit {
 
 hit storage_getShot(void);
 //void storage_resetEntry(int);
-void storage_removeHit(int);
+int storage_removeHit(int);
 //void storage_increaseList(void);
 //void storage_increaseNumberHits(void);
 void storage_start(void);
