@@ -335,12 +335,29 @@ void received_bluetooth(void){
                 receive_startTag=receive_position;
             }
         }
+
+        //If the position is bigger or equal to the maximum size, it resets.
+        if(receive_position>=BUFFER_SIZE){
+            //Resets the start and end tags. Sets the position to 1. 
+            int i = 0;
+            for(i=0; i<BUFFER_SIZE; i++){
+                receive_buffer[i] = ' ';
+            }
+            receive_buffer[BUFFER_SIZE-1] = '\0';
+            receive_startTag = 0;
+            receive_endTag = 0;
+            receive_position = 1;
+            break;
+        }
+
         receive_position++;
     }
+
 
     if(receive_startTag!=0 && receive_endTag!=0){
         receive_processString();
     }
+    
 }
 
 // ********* RECEIVE ENDS HERE **********************************
