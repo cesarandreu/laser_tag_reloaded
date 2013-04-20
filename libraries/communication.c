@@ -144,7 +144,7 @@ void receive_gameNew(void){
     response_new();
 
     //Does something to start a new game.
-    //game_new();
+    game_new();
 
     /*
     //Testing:
@@ -185,7 +185,7 @@ void receive_gameOver(void){
     response_end();
 
     //Does something now to end the game.
-    //game_end(gameResult);
+    game_end(gameResult);
 
 }
 
@@ -227,15 +227,13 @@ void receive_gameInformation(void){
         enemy_addEnemy(receive_parseInt());
     }
     
-    
-
-    //Functions to save the player data
-    //player_start(received_playerNumber);
 
 
     //Function that responds to the micro saying that the game info was saved
     response_information(received_gameType, received_gameLimit, received_enemyNumber);
 
+    //Function to store the game information.
+    game_information(received_gameType, received_playerNumber, received_gameLimit);
 
     //Testing:
  /* value = receive_getNext(value);
@@ -248,6 +246,24 @@ void receive_gameInformation(void){
 
 }
 
+
+void receive_gameStart(void){
+    //Function that responds to the micro saying that the game started.
+    response_start();
+
+    //Function that makes the game start. 
+    game_start();
+
+    /*
+    //Testing:
+    char myString[100] = "Game start!";
+    bluetooth_printString(myString);
+    gpio_toggle_bit(GPIOB, 1);
+    */
+
+}
+    
+//Removes the acknowledged number from storage.
 void receive_gameAcknowledge(void){
     int numberAcknowledged = 0;
     int value = receive_startTag + 3; 
@@ -266,22 +282,6 @@ void receive_gameAcknowledge(void){
     //Testing:
     char myString[100] = {' '};
     sprintf(myString, "\n %d number acknowledged!", numberAcknowledged);
-    bluetooth_printString(myString);
-    gpio_toggle_bit(GPIOB, 1);
-    */
-
-}
-
-void receive_gameStart(void){
-    //Function that responds to the micro saying that the game started.
-    response_start();
-
-    //Function that makes the game start. 
-    //game_start();
-
-    /*
-    //Testing:
-    char myString[100] = "Game start!";
     bluetooth_printString(myString);
     gpio_toggle_bit(GPIOB, 1);
     */
