@@ -34,6 +34,8 @@
 #define GPS_PIN_TX 9
 #define GPS_PORT_RX GPIOA
 #define GPS_PIN_RX 10
+#define GPS_TIMER TIMER1
+#define GPS_CHANNEL TIMER_CH1
 
 #define GPS_VDD 8
 
@@ -42,9 +44,35 @@
 
 #define NMEA_MAX_MESSAGE_LENGTH 82
 
-//To consider: Implement Cold/Hot start functions?
-//Idea for cold start, start and wait for coords or 30 seconds, whichever comes first.
-//Might be better to separate wait to avoid blocking and allow startup for other components simultaneously.
+void gps_warmRefresh(void){
+    int waitCount = 0;
+    //Check for fix 20 times or until fix is found, whichever comes first
+    while(gps_hasFix() == 1 && waitCount < 20)
+    {
+        waitCount++;
+    }
+}
+
+void gps_coldRefresh(void){
+    int waitCount = 0;
+    //Check for fix 20 times or until fix is found, whichever comes first
+    while(gps_hasFix() == 1 && waitCount < 20)
+    {
+        waitCount++;
+    }
+    if(gps_hasFix() == 1)
+    {
+        timer_pause(GPS_TIMER);
+        timer_detach_interrupt(GPS_TIMER, (uint8)GPS_CHANNEL);
+        timer_attach_interrupt(GPS_TIMER, (uint8)GPS_CHANNEL, gps_warmRefresh);
+        timer_set_reload(GPS_TIMER, 58800); //Set to 100ms
+        timer_set_compare(GPS_TIMER, GPS_CHANNEL, 58800);
+        timer_set_count(GPS_TIMER, 0);
+        timer_generate_update(GPS_TIMER);
+        timer_resume(GPS_TIMER);
+    }
+}
+
 void gps_start(void){
     usart_config_gpios_async(GPS_USART, GPS_PORT_RX, GPS_PIN_RX, GPS_PORT_TX, GPS_PIN_TX, 0);
     usart_init(GPS_USART);
@@ -57,9 +85,21 @@ void gps_start(void){
     
     //Enable GPS USART Port
     usart_enable(GPS_USART);
+
+    //Enable timer and begin 30 second wait for fix
+    timer_init(GPS_TIMER);
+    timer_pause(GPS_TIMER);
+    timer_set_prescaler(GPS_TIMER, 120); //Setting prescaler to 120 (600KHz)
+    timer_set_mode(GPS_TIMER, GPS_CHANNEL, TIMER_OUTPUT_COMPARE);
+    timer_attach_interrupt(GPS_TIMER, (uint8)GPS_CHANNEL, gps_coldRefresh);
+    timer_set_reload(GPS_TIMER, 588); //Set to 1ms
+    timer_set_compare(GPS_TIMER, GPS_CHANNEL, 588);
+    timer_generate_update(GPS_TIMER);
+    timer_resume(GPS_TIMER);
 }
 
 void gps_end(void){
+    timer_disable(GPS_TIMER);
     usart_disable(GPS_USART);
     gpio_write_bit(GPIOA, 8, 0);
 }
@@ -88,6 +128,7 @@ int gps_readString(char *str, int length){
 
 //Return 0 if string is invalid size
 //Return 1 if valid string is sent
+//Maximum message string length is of size 83 including the null termination character
 uint8 gps_readMessage(char *str, int length){
     if(length < NMEA_MAX_MESSAGE_LENGTH+1)
     {
@@ -116,11 +157,15 @@ void gps_write(unsigned char ch){
 //The resulting string size will contain 24 characters.
 //TODO: Null termination of String '\0'
 int gps_getLocation(char *str, int length){
-    //If the string's length is not 12 (+1 for string end character), return 0
-    if(length != 12+1)
+    //If the string's length is not 24 (+1 for string end character), return 0
+    if(length != 24+1)
         return 0;
-
     gps_start();
+
+    //Buffer clearing
+    usart_reset_rx(GPS_USART);
+    while(!gps_available());
+
     //Wait for the GPS to get a fix if available, if it does not after x time, return 0
     //TODO: Make this a timer-based implementation
     int waitCount = 0;
@@ -129,13 +174,12 @@ int gps_getLocation(char *str, int length){
     if(waitCount == 20)
         return 0;
 
-
     //Find the string that contains the coordinates from the GPS output
-    char tmp_str[13] = "            ";
+    char tmp_str[25] = "                        ";
     while(1){
         if(gps_read() == '$'){
             gps_readString(tmp_str, 6);
-            if(strcmp(tmp_str, "GPRMC") == 0){
+            if(strcmp(tmp_str, "GPRMC                   ") == 0){
                 break;
             }
         }
@@ -148,13 +192,18 @@ int gps_getLocation(char *str, int length){
     }
 
     //Read the coordinates, store the in str and return 1
-    gps_readString(tmp_str, 12);
+    gps_readString(tmp_str, 25);
     gps_end();
     strcpy(str, tmp_str);
+
     return 1;
 }
 
 uint8 gps_hasFix(void){
+    //Buffer clearing
+    usart_reset_rx(GPS_USART);
+    while(!gps_available());
+
     char str[6] = "     ";
     while(1){
         if(gps_read() == '$'){
@@ -174,5 +223,4 @@ uint8 gps_hasFix(void){
         return 0;
     else
         return 1;
-    //TODO: Do I want to read the rest of the message to clear it from buffer?
 }

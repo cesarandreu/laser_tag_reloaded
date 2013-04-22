@@ -120,8 +120,9 @@ uint8 receiver_interpretCode(void){
 }
 
 void receiver_start(void){
-    //gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
     gpio_set_mode(RECEIVER_PORT, RECEIVER_PIN, GPIO_INPUT_PU);
+    //I don't think we need to use afio (alternate function i/o) here, unless the reciever
+    //is operating as something other than a GPIO
     //afio_exti_select(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT);
     exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, handler, EXTI_FALLING);
 
