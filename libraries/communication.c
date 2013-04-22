@@ -29,14 +29,14 @@
 
 void transmit_playerData(int shotsFired){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'player', shotsFired: %d}", shotsFired);
+    sprintf(message, "{\"type\": \"player\", \"shotsFired\": %d}\r\n", shotsFired);
     bluetooth_printString(message);
 
 }
 
 void transmit_hitData(hit transmit){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'hit', id: %d, hitNumber: %d, gps: '%s'}", transmit.ID, transmit.hitNumber, transmit.location);
+    sprintf(message, "{\"type\": \"hit\", \"id\": %d, \"hitNumber\": %d, \"gps\": \"%s\"}\r\n", transmit.ID, transmit.hitNumber, transmit.location);
     bluetooth_printString(message);
 }
 
@@ -50,32 +50,32 @@ void transmit_hitData(hit transmit){
 
 void response_information(char gameType, int playerNumber, int gameLimit, int enemyNumber){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'information', gameType: '%c, playerNumber: %d, gameLimit: %d, enemyNumber: %d}", gameType, playerNumber, gameLimit, enemyNumber);
+    sprintf(message, "{\"type\": \"response\", \"response\": \"information\", \"gameType\": \"%c\", \"playerNumber\": %d, \"gameLimit\": %d, \"enemyNumber\": %d}\r\n", gameType, playerNumber, gameLimit, enemyNumber);
     bluetooth_printString(message);
 }
 
 void response_hitAcknowledged(int hitNumber){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'hitAcknowledged', hitNumber: %d}", hitNumber);
+    sprintf(message, "{\"type\": \"response\", \"response\": \"hitAcknowledged\", \"hitNumber\": %d}\r\n", hitNumber);
     bluetooth_printString(message);
 }
 
 void response_end(int resultNumber){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'end', result: %d}", resultNumber);
+    sprintf(message, "{\"type\": \"response\", \"response\": \"end\", \"result\": %d}\r\n", resultNumber);
     bluetooth_printString(message);
 
 }
 
 void response_new(void){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'new'}");
+    sprintf(message, "{\"type\": \"response\", \"response\": \"new\"}\r\n");
     bluetooth_printString(message);
 }
 
 void response_start(void){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'start'}");
+    sprintf(message, "{\"type\": \"response\", \"response\": \"start\"}\r\n");
     bluetooth_printString(message);
 }
 
