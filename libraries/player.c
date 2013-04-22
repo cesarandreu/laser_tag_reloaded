@@ -1,7 +1,7 @@
 #include "player.h"
 
 int code = DEFAULT_PLAYER_CODE;
-unsigned int shotsFired = DEFAULT_SHOTS_FIRED;
+int shotsFired = DEFAULT_SHOTS_FIRED;
 
 void player_start(int pCode){
     code = pCode;
@@ -16,7 +16,7 @@ void player_shoot(void){
     }
 }
 
-unsigned int player_getShots(void){
+int player_getShots(void){
     return shotsFired;
 }
 

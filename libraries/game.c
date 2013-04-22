@@ -102,7 +102,7 @@ void game_end(int statusCode){
     //--}
 
     receiver_disable();
-    gps_end();
+    //gps_end();
     transmit_playerData(player_getShots());
     player_reset();
     enemy_reset();
@@ -116,7 +116,7 @@ void game_end(int statusCode){
     }
 
     storage_reset();
-
+    
 
     /* TO-DO Later: Add win/lose sound.
     if(statusCode==1){

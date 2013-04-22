@@ -16,7 +16,7 @@ extern "C" {
     
 void player_start(int);
 void player_shoot(void);
-unsigned int player_getShots(void);
+int player_getShots(void);
 int player_getCode(void);
 void player_setCode(int);
 void player_reset(void);

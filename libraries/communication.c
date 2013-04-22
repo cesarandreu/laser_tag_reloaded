@@ -60,9 +60,9 @@ void response_hitAcknowledged(int hitNumber){
     bluetooth_printString(message);
 }
 
-void response_end(void){
+void response_end(int resultNumber){
     char message[128] = { ' ' };
-    sprintf(message, "{type: 'response', response: 'end'}");
+    sprintf(message, "{type: 'response', response: 'end', result: %d}", resultNumber);
     bluetooth_printString(message);
 
 }
@@ -177,12 +177,13 @@ void receive_gameNew(void){
         return;
     }
     
-    //Some function that responds to the micro saying that you've started a new game state.
-    response_new();
 
     //Function that makes the micro reset everything for a new game.
     game_new();
 
+    //Some function that responds to the micro saying that you've started a new game state.
+    response_new();
+    
     /*
     //Testing:
     char myString[100] = "Game new!";
@@ -231,11 +232,11 @@ void receive_gameOver(void){
     }
     */
 
-    //Function to respond to the phone saying that the micro has acknowledged that the game has ended.
-    response_end();
-
     //Does something now to end the game.
     game_end(gameResult);
+    
+    //Function to respond to the phone saying that the micro has acknowledged that the game has ended.
+    response_end(gameResult);
 
 }
 
@@ -313,7 +314,6 @@ void receive_gameInformation(void){
     }
     */
     
-    int textLeft = receive_endTag - value;
 
     int i=0;
     for(i=0; i<received_enemyNumber; i++){
@@ -349,11 +349,12 @@ void receive_gameInformation(void){
     */
 
 
-    //Function that responds to the micro saying that the game info was saved
-    response_information(received_gameType, received_playerNumber, received_gameLimit, received_enemyNumber);
 
     //Function to store the game information.
     game_information(received_gameType, received_playerNumber, received_gameLimit, received_enemyNumber, received_enemyList);
+
+    //Function that responds to the micro saying that the game info was saved
+    response_information(received_gameType, received_playerNumber, received_gameLimit, received_enemyNumber);
 
     //Testing:
     /*
@@ -381,12 +382,13 @@ void receive_gameStart(void){
         return;
     }
     
-    //Function that responds saying that the game start has been acknowledged.
-    response_start();
 
     //Function that makes the game start. 
     game_start();
 
+    //Function that responds saying that the game start has been acknowledged.
+    response_start();
+    
     /*
     //Testing:
     char myString[100] = "Game start!";
@@ -414,16 +416,19 @@ void receive_gameAcknowledge(void){
     value = receive_getNext(value);
     numberAcknowledged = receive_parseInt();
 
-    //Then responds to bluetooth saying it removed it.
-    response_hitAcknowledged(numberAcknowledged);
+
 
     //Remove acknowledged number.
     //storage_removeHit returns the hitNumber it removed.
     //If it returns zero then it means nothing was removed.
-    //This would mean that the hit number was not stored. 
-    numberAcknowledged = storage_removeHit(numberAcknowledged);
+    //This would mean that the hit number was not stored.
+    
+    //Returns the number it removed, if we ever wanna do something with that.
+    storage_removeHit(numberAcknowledged);
 
-
+    //Then responds to bluetooth saying it removed it.
+    response_hitAcknowledged(numberAcknowledged);
+    
     /*
     //Testing:
     char myString[100] = {' '};

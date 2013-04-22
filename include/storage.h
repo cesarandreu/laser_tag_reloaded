@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-#define MAXIMUM_NUMBER_HITS 64
+#define MAXIMUM_NUMBER_HITS 128
 #define MAXIMUM_GPS_LENGTH 25
 #define NULL_TERMINATED_GPS_STRING "                        "
 
