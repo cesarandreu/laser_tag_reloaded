@@ -9,6 +9,11 @@ extern "C" {
 #define DEFAULT_PLAYER_CODE 1
 #define DEFAULT_SHOTS_FIRED 0
 
+// [ 2 <-> (2^8)-1] are the allowed numbers (between 2 and 255)
+#define MAXIMUM_PLAYER_NUMBER 255
+#define MINIMUM_PLAYER_NUMBER 2
+    
+    
 void player_start(int);
 void player_shoot(void);
 unsigned int player_getShots(void);

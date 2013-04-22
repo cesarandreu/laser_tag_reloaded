@@ -62,7 +62,13 @@ void game_start(void){
 
 }
 
-void game_information(char gameType, int playerNumber, int gameLimit){
+void game_information(char gameType, int playerNumber, int gameLimit, int enemyNumber, int enemyList[]){
+    
+    int i=0;
+    for(i=0; i<enemyNumber; i++){
+        enemy_addEnemy(enemyList[i]);
+    }
+    
     player_setCode(playerNumber);
     sender_setPlayerCode(playerNumber);
 
