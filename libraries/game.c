@@ -9,6 +9,18 @@
 #include "storage.h"
 
 
+//Testing
+//--{
+//#include <libmaple/gpio.h>
+//#include <libmaple/exti.h>
+//
+//void game_triggerButton(void){
+//    sender_shoot();
+//    player_shoot();
+//    speaker_playShoot();
+//}
+//--}
+
 void game_receiverInterrupt(void){
     int receivedCode = receiver_listenSignal();
 
@@ -60,6 +72,12 @@ void game_start(void){
 
     //Some function to set the trigger button's interrupt.
 
+    //Testing, remove later.
+    //--{
+    //gpio_set_mode(GPIOA, 13, GPIO_INPUT_PD);
+    //exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, game_triggerButton, EXTI_RISING);
+    //--}
+
 }
 
 void game_information(char gameType, int playerNumber, int gameLimit, int enemyNumber, int enemyList[]){
@@ -77,6 +95,11 @@ void game_information(char gameType, int playerNumber, int gameLimit, int enemyN
 void game_end(int statusCode){
 
     //Some function to disable the trigger button's interrupt.
+    
+    //Testing, remove later.
+    //--{
+    //exti_detach_interrupt(AFIO_EXTI_13);
+    //--}
 
     receiver_disable();
     gps_end();
