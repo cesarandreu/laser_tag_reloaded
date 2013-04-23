@@ -26,34 +26,30 @@
  *****************************************************************************/
 
 
-#ifndef _GPS_H_
-#define _GPS_H_
+#include "GPS.h"
 
-/* Conditional extern "C" so we're safe to call from C++ files */
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define TRIGGER_PORT GPIOC
+#define TRIGGER_PIN 14
 
-#include <libmaple/libmaple.h>
-#include <libmaple/gpio.h>
-#include <libmaple/timer.h>
-#include <libmaple/usart.h>
-#include <string.h>
+voidFuncPtr trigger_handler;
 
-void gps_start(void);
-void gps_end(void);
-uint32 gps_available(void);
-uint8 gps_read(void);
-int gps_readString(char *str, int length);
-uint8 gps_readMessage(char *str, int length);
-void gps_write(unsigned char ch);
-uint8 gps_hasFix(void);
-void getLocation(char *str, int length);
-void gps_enable(void);
-void gps_disable(void);
-
-#ifdef __cplusplus
+void trigger_start(void){
+	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);
 }
-#endif
 
-#endif 
+void trigger_end(void){
+	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_FLOATING);
+}
+
+void trigger_set_interrupt(voidFuncPtr handler){
+	trigger_handler = handler;
+	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, handler, EXTI_RISING);
+}
+
+void trigger_enable_interrupt(void){
+	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, trigger_handler, EXTI_RISING);
+}
+
+void trigger_disable_interrupt(void){
+	exti_detach_interrupt(AFIO_EXTI_14);
+}

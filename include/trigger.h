@@ -26,8 +26,8 @@
  *****************************************************************************/
 
 
-#ifndef _GPS_H_
-#define _GPS_H_
+#ifndef _TRIGGER_H_
+#define _TRIGGER_H_
 
 /* Conditional extern "C" so we're safe to call from C++ files */
 #ifdef __cplusplus
@@ -36,21 +36,12 @@ extern "C" {
 
 #include <libmaple/libmaple.h>
 #include <libmaple/gpio.h>
-#include <libmaple/timer.h>
-#include <libmaple/usart.h>
-#include <string.h>
 
-void gps_start(void);
-void gps_end(void);
-uint32 gps_available(void);
-uint8 gps_read(void);
-int gps_readString(char *str, int length);
-uint8 gps_readMessage(char *str, int length);
-void gps_write(unsigned char ch);
-uint8 gps_hasFix(void);
-void getLocation(char *str, int length);
-void gps_enable(void);
-void gps_disable(void);
+void trigger_start(void);
+void trigger_end(void);
+void trigger_set_interrupt(voidFuncPtr);
+void trigger_enable_interrupt(void);
+void trigger_disable_interrupt(void);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,9 @@
 #define GPS_TIMER TIMER1
 #define GPS_CHANNEL TIMER_CH1
 
-#define GPS_VDD 8
+//GPS VDD Information
+#define GPS_VDD_PORT GPIOA
+#define GPS_VDD_PIN 1
 
 //GPS Coordinate Message Length (Including Null-Termination Character)
 #define GPS_COORDINATE_LENGTH 25
@@ -47,16 +49,17 @@
 void gps_warmRefresh(void){
     int waitCount = 0;
     //Check for fix 20 times or until fix is found, whichever comes first
-    while(gps_hasFix() == 1 && waitCount < 20)
+    while(gps_hasFix() == 0 && waitCount < 20)
     {
         waitCount++;
     }
+    gps_disable();
 }
 
 void gps_coldRefresh(void){
     int waitCount = 0;
     //Check for fix 20 times or until fix is found, whichever comes first
-    while(gps_hasFix() == 1 && waitCount < 20)
+    while(gps_hasFix() == 0 && waitCount < 20)
     {
         waitCount++;
     }
@@ -70,6 +73,7 @@ void gps_coldRefresh(void){
         timer_set_count(GPS_TIMER, 0);
         timer_generate_update(GPS_TIMER);
         timer_resume(GPS_TIMER);
+        gps_disable();
     }
 }
 
@@ -80,8 +84,8 @@ void gps_start(void){
 
     //Enable BJT to turn on GPS
     //TODO: Confirm this isn't affected by being on UART CLK Pin (Currently unused)
-    gpio_set_mode(GPIOA, 1, GPIO_OUTPUT_PP);
-    gpio_write_bit(GPIOA, 8, 1);
+    gpio_set_mode(GPS_VDD_PORT, GPS_VDD_PIN, GPIO_OUTPUT_PP);
+    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
     
     //Enable GPS USART Port
     usart_enable(GPS_USART);
@@ -98,10 +102,20 @@ void gps_start(void){
     timer_resume(GPS_TIMER);
 }
 
+void gps_disable(void){
+    usart_disable(GPS_USART);
+    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
+}
+
+void gps_enable(void){
+    usart_enable(GPS_USART);
+    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
+}
+
 void gps_end(void){
     timer_disable(GPS_TIMER);
     usart_disable(GPS_USART);
-    gpio_write_bit(GPIOA, 8, 0);
+    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
 }
 
 uint32 gps_available(void){
@@ -167,7 +181,6 @@ int gps_getLocation(char *str, int length){
     while(!gps_available());
 
     //Wait for the GPS to get a fix if available, if it does not after x time, return 0
-    //TODO: Make this a timer-based implementation
     int waitCount = 0;
     while(gps_hasFix() == 0 && waitCount < 20)
         waitCount++;
@@ -205,14 +218,20 @@ uint8 gps_hasFix(void){
     while(!gps_available());
 
     char str[6] = "     ";
-    while(1){
+    int waitCount = 0;
+    while(waitCount < 20){
         if(gps_read() == '$'){
             gps_readString(str, 6);
             if(strcmp(str, "GPRMC") == 0){
                 break;
             }
         }
+        waitCount++;
     }
+
+    if(waitCount == 20)
+        return 0;
+
     //Check for new GPS line, then check for GPRMC, then check for valid fix flag, if valid true, if invalid false
     int i;
     for(i=0; i < 12; i++){
