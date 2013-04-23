@@ -11,14 +11,16 @@
 
 //Testing
 //--{
-//#include <libmaple/gpio.h>
-//#include <libmaple/exti.h>
-//
-//void game_triggerButton(void){
-//    sender_shoot();
-//    player_shoot();
-//    speaker_playShoot();
-//}
+/*
+#include <libmaple/gpio.h>
+#include <libmaple/exti.h>
+
+void game_triggerButton(void){
+    sender_shoot();
+    player_shoot();
+    speaker_playShoot();
+}
+*/
 //--}
 
 void game_receiverInterrupt(void){
@@ -32,7 +34,7 @@ void game_receiverInterrupt(void){
         if(enemy_checkExist(receivedCode)!=0){
 
         //Some function to turn on GPS and the location data.
-
+        //gps_getLocation(gps_location);
         storage_add(receivedCode, gps_location);
         transmit_hitData(storage_getShot());
         transmit_playerData(player_getShots());
