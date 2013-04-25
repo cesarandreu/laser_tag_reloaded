@@ -79,6 +79,12 @@ void response_start(void){
     bluetooth_printString(message);
 }
 
+void response_connected(void){
+    char message[128] = { ' ' };
+    sprintf(message, "{\"type\": \"response\", \"response\": \"connected\"}\r\n");
+    bluetooth_printString(message);
+}
+
 // ********* RESPONSE ENDS HERE **********************************
 
 
@@ -113,9 +119,13 @@ void response_start(void){
 // Example: #S,#
 // S  - Game Start
 
-//New  game - #N,#
+//New game - #N,#
 // Example: #N,#
 // N - New game
+
+//Check connection - #C,#
+//Example: #C,#
+// C - Check status
 
 //================================================================
 
@@ -369,6 +379,22 @@ void receive_gameInformation(void){
 
 }
 
+//Checks connection
+//Example: #C,#
+//(4-1 = 3),  so it must be exactly three.
+void receive_connected(void){
+    
+    //The received string must be exactly four characters long.
+    //Since we do end-start then the length requires subtracting one.
+    //If it's bigger or smaller, then it returns.
+    if((receive_endTag-receive_startTag)<3 || (receive_endTag-receive_startTag)>3){
+        return;
+    }
+
+    //Function that responds that the MCU is connected.
+    response_connected();
+
+}
 
 //Starts the game!
 //Example: #S,#
@@ -492,6 +518,9 @@ void receive_processString(void){
             break;
         case 'N':
             receive_gameNew();
+            break;
+        case 'C':
+            receive_connected();
             break;
         default:
             break;
