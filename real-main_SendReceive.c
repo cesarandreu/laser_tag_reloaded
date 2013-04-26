@@ -1,0 +1,57 @@
+//Plays the shoot sound whenever BUT (onboard button) is pressed. 
+//Requires a speaker connected to P3 and GND.
+
+//Local includes:
+#include <libmaple/libmaple.h>
+#include "initialize.h"
+#include "speaker.h"
+//#include "bluetooth.h"
+#include "receiver.h"
+#include "sender.h"
+
+#include <libmaple/gpio.h>
+#include <libmaple/exti.h>
+
+char currentChar = 'a';
+
+void pushButton(void){
+    sender_shoot();
+    speaker_playShoot();
+}
+
+// setup() and loop():
+void setup(void) {
+    speaker_start();
+    sender_start(8);
+    receiver_start();
+
+    //Onboard button
+    gpio_set_mode(GPIOC, 13, GPIO_INPUT_PU);
+    exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PC, pushButton, EXTI_FALLING);
+
+    //Onboard LED
+    gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
+    gpio_write_bit(GPIOB, 1, 1);
+
+    //gpio_set_mode(GPIOC, 13, GPIO_OUTPUT_PP);
+    //gpio_write_bit(GPIOC, 13, 1);
+}
+
+void loop(void) {
+
+}
+
+
+__attribute__((constructor)) void premain() {
+    init();
+}
+
+int main(void) {
+    setup();
+
+    while (1) {
+        loop();
+    }
+
+    return 0;
+}
