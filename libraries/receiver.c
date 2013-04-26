@@ -80,8 +80,6 @@ int receiver_listenForIR(void) {
 
 int receiver_listenSignal(void){
     
-    speaker_playHit(); //TEST
-    
     if(gpio_read_bit(RECEIVER_PORT, RECEIVER_PIN) == 0){
     
     nvic_globalirq_disable();
@@ -96,7 +94,7 @@ int receiver_listenSignal(void){
     }
         
     nvic_globalirq_enable();
-
+    
     return playerNumber;
 
     } else {
