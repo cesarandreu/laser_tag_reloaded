@@ -1,26 +1,13 @@
 #include "receiverBack.h"
-#include "speaker.h"
-#include <libmaple/libmaple.h>
-#include <libmaple/exti.h>
-#include <libmaple/gpio.h>
-#include <libmaple/nvic.h>
-#include <stdio.h>
 
-#define ZERO_DURATION 541
-#define MAXPULSE 8125 // This value is 65000/8 (arbitrarily selected 8).
-#define RESOLUTION 20
-//Old
-//#define RECEIVERB_PORT GPIOC
-//#define RECEIVERB_PIN 13
-#define RECEIVERB_PORT GPIOA
-#define RECEIVERB_PIN 15
-#define WANTED_PULSES 5
-//Old
-//#define RECEIVERB_EXTI_LINE AFIO_EXTI_13
-//#define RECEIVERB_EXTI_PORT AFIO_EXTI_PC
-#define RECEIVERB_EXTI_LINE AFIO_EXTI_15
-#define RECEIVERB_EXTI_PORT AFIO_EXTI_PA
-//#define RECEIVERB_DEFAULT_HANDLER RECEIVERB_listenSignal
+//#define ZERO_DURATION 541
+//#define MAXPULSE 8125 // This value is 65000/8 (arbitrarily selected 8).
+//#define RESOLUTION 20
+#define RECEIVERB_PORT GPIOB
+#define RECEIVERB_PIN 5
+//#define WANTED_PULSES 5
+#define RECEIVERB_EXTI_LINE AFIO_EXTI_5
+#define RECEIVERB_EXTI_PORT AFIO_EXTI_PB
 
 
 uint16 pulsesB[100][2] = {{0}};
@@ -94,6 +81,8 @@ int receiverB_listenSignal(void){
     }
         
     nvic_globalirq_enable();
+
+    speaker_playHit(); //TEST
     
     return playerNumberB;
 

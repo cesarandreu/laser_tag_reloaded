@@ -26,11 +26,7 @@
  *****************************************************************************/
 
 //Local includes:
-#include <libmaple/libmaple.h>
-#include "initialize.h"
-#include <libmaple/gpio.h>
-#include <libmaple/exti.h>
-#include <libmaple/timer.h>
+#include "ledGraph.h"
 
 #define MAX_RELOAD ((1 << 16) - 1)
 #define BATTERY_BUTTON_PORT GPIOC
@@ -63,6 +59,8 @@
 #define BATTERY_TIMER TIMER1
 #define BATTERY_TIMER_CH TIMER_CH1
 #define BATTERY_PERIOD 2000000
+
+#define CYCLES_PER_MICROSECOND 72
 
 void writeLed(void){
 	int percent = gauge_percentFloat();

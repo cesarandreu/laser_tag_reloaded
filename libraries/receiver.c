@@ -1,20 +1,14 @@
 #include "receiver.h"
-#include "speaker.h"
-#include <libmaple/libmaple.h>
-#include <libmaple/exti.h>
-#include <libmaple/gpio.h>
-#include <libmaple/nvic.h>
-#include <stdio.h>
 
-#define ZERO_DURATION 541
-#define MAXPULSE 8125 // This value is 65000/8 (arbitrarily selected 8).
-#define RESOLUTION 20
+//#define ZERO_DURATION 541
+//#define MAXPULSE 8125 // This value is 65000/8 (arbitrarily selected 8).
+//#define RESOLUTION 20
 //Old
 //#define RECEIVER_PORT GPIOC
 //#define RECEIVER_PIN 13
 #define RECEIVER_PORT GPIOA
 #define RECEIVER_PIN 15
-#define WANTED_PULSES 5
+//#define WANTED_PULSES 5
 //Old
 //#define RECEIVER_EXTI_LINE AFIO_EXTI_13
 //#define RECEIVER_EXTI_PORT AFIO_EXTI_PC
@@ -80,8 +74,6 @@ int receiver_listenForIR(void) {
 
 int receiver_listenSignal(void){
     
-    speaker_playHit(); //TEST
-    
     if(gpio_read_bit(RECEIVER_PORT, RECEIVER_PIN) == 0){
     
     nvic_globalirq_disable();
@@ -96,6 +88,8 @@ int receiver_listenSignal(void){
     }
         
     nvic_globalirq_enable();
+
+    speaker_playHit(); //TEST
 
     return playerNumber;
 

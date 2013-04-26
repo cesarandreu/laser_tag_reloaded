@@ -7,6 +7,12 @@ extern "C" {
 #endif
 
 #include <libmaple/libmaple.h>
+#include <libmaple/exti.h>
+#include <libmaple/gpio.h>
+#include <libmaple/nvic.h>
+#include <stdio.h>
+#include "speaker.h"
+#include "receiverCommon.h"
 
 int receiverB_listenForIR(void);
 int receiverB_listenSignal(void);
