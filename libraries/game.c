@@ -113,8 +113,10 @@ void game_end(int statusCode){
     int i=0;
     for(i=0; i<storage_unsentEntries(); i++){
         hit toSend = storage_getShot();
-        transmit_hitData(toSend);
-        storage_removeHit(toSend.hitNumber);
+        if(toSend.ID!=0){
+            transmit_hitData(toSend);
+            storage_removeHit(toSend.hitNumber);
+        }
     }
 
     storage_reset();

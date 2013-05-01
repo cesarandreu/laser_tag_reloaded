@@ -69,7 +69,7 @@ int storage_removeHit(int number){
 }
 
 void storage_increaseList(void){
-    if(shot_listPosition==(MAXIMUM_NUMBER_HITS-1)){
+    if(shot_listPosition>=(MAXIMUM_NUMBER_HITS-1)){
         shot_listPosition=0;
     } else { 
         shot_listPosition++;
