@@ -34,8 +34,15 @@
 
 voidFuncPtr trigger_handler;
 
+void trigger_defaultInterrupt(void)
+{	
+	return;
+}
+
 void trigger_start(void){
 	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);
+	trigger_handler = trigger_defaultInterrupt;
+	exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, handler, EXTI_RISING);
 }
 
 void trigger_end(void){
