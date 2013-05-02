@@ -88,6 +88,9 @@ int receiver_listenSignal(void){
     }
         
     nvic_globalirq_enable();
+
+    //speaker_playHit(); //TEST
+
     
     return playerNumber;
 

@@ -82,7 +82,7 @@ int receiverB_listenSignal(void){
         
     nvic_globalirq_enable();
 
-    speaker_playHit(); //TEST
+    //speaker_playHit(); //TEST
     
     return playerNumberB;
 
