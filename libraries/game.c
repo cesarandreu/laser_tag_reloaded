@@ -144,12 +144,18 @@ void game_information(char gameType, int playerNumber, int gameLimit, int enemyN
 
 void game_end(int statusCode){
 
+    //Sender.c does not turn off.
+
+    //Speaker.c does not turn off.
+
+
     //Some function to disable the trigger button's interrupt.
     
     //Testing, remove later.
     //--{
     //exti_detach_interrupt(AFIO_EXTI_13);
     //--}
+    
     trigger_disable_interrupt();
     
     receiver_disable();
