@@ -1,12 +1,15 @@
 #include "game.h"
-#include "communication.h"
-#include "enemy.h"
-#include "GPS.h"
-#include "player.h"
-#include "receiver.h"
-#include "receiverBack.h"
-#include "sender.h"
-#include "storage.h"
+//#include "communication.h"
+//#include "enemy.h"
+//#include "GPS.h"
+//#include "player.h"
+//#include "receiver.h"
+//#include "receiverBack.h"
+//#include "receivedCommon.h"
+//#include "sender.h"
+//#include "speaker.h"
+//#include "storage.h"
+//#include "trigger.h"
 
 //Testing
 //--{
@@ -172,8 +175,10 @@ void game_end(int statusCode){
     int i=0;
     for(i=0; i<storage_unsentEntries(); i++){
         hit toSend = storage_getShot();
-        transmit_hitData(toSend);
-        storage_removeHit(toSend.hitNumber);
+        if(toSend.ID!=0){
+            transmit_hitData(toSend);
+            storage_removeHit(toSend.hitNumber);
+        }
     }
 
     storage_reset();

@@ -7,6 +7,18 @@
 extern "C" {
 #endif
 
+#include "communication.h"
+#include "enemy.h"
+#include "GPS.h"
+#include "player.h"
+#include "receiver.h"
+#include "receiverBack.h"
+#include "receivedCommon.h"
+#include "sender.h"
+#include "speaker.h"
+#include "storage.h"
+#include "trigger.h"
+
 void game_receiverInterrupt(void);
 void game_new(void);
 void game_start(void);
