@@ -1,13 +1,12 @@
-
 #include "game.h"
 #include "communication.h"
 #include "enemy.h"
 #include "GPS.h"
 #include "player.h"
 #include "receiver.h"
+#include "receiverBack.h"
 #include "sender.h"
 #include "storage.h"
-
 
 //Testing
 //--{
@@ -45,7 +44,7 @@ void game_receiverInterrupt(void){
         if(enemy_checkExist(receivedCode)!=0){
 
         //Some function to turn on GPS and the location data.
-        //gps_getLocation(gps_location);
+        gps_getLocation(gps_location);
         storage_add(receivedCode, gps_location);
         transmit_hitData(storage_getShot());
         transmit_playerData(player_getShots());
@@ -68,7 +67,7 @@ void game_receiverInterrupt(void){
 
 void game_new(void){
     enemy_start();
-    //gps_start();
+    gps_start();
     player_start(DEFAULT_PLAYER_CODE);
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
@@ -82,6 +81,7 @@ void game_new(void){
 void game_start(void){
     //gps_end();
     receiver_enable();
+    receiverB_enable();
 
     //Some function to set the trigger button's interrupt.
 
@@ -124,7 +124,7 @@ void game_end(int statusCode){
     //--}
 
     receiver_disable();
-    //gps_end();
+    gps_end();
     transmit_playerData(player_getShots());
     player_reset();
     enemy_reset();

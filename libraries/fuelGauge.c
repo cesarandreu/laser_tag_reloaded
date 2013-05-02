@@ -37,6 +37,7 @@ void gauge_alert(void)
   //Turn off system by SW?
   //Attempt to send current data via BT and then turn off?
   //Implement some kind of temporary storage we can pull from?
+  //ALTERNATIVE: Configure interrupt handler externally.
 }
 
 /*
@@ -74,43 +75,6 @@ unsigned int i2cRead16(unsigned char address)
   data |= i2c_receive();
   
   return data;
-}
-
-/*
-gauge_voltage() returns a 12-bit ADC reading of the battery voltage,
-as reported by the MAX17043's VCELL register.
-This does not return a voltage value. To convert this to a voltage,
-multiply by 5 and divide by 4096.
-*/
-//TODO: Determine output string length to perform input length verification
-void gauge_voltage(char *str, int length)
-{
-  unsigned int vcell;
-  
-  vcell = i2cRead16(0x02);
-  vcell = vcell >> 4;  // last 4 bits of vcell are nothing
-  batVoltage = (float) vcellMAX17043() * 1/800;
-
-  sprintf(str, "%02f", (double)batVoltage);
-  //return vcell;
-}
-
-/*
-gauge_percent() returns a float value of the battery percentage
-reported from the SOC register of the MAX17043.
-*/
-//TODO: Determine output string length to perform input length verification
-void gauge_percent(char *str, int length)
-{
-  unsigned int soc;
-  float percent;
-  
-  soc = i2cRead16(0x04);  // Read SOC register of MAX17043
-  percent = (byte) (soc >> 8);  // High byte of SOC is percentage
-  percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
-  
-  sprintf(str, "%02f", (double)batPercentage);
-  //return percent;
 }
 
 /* 
@@ -153,4 +117,52 @@ void gauge_start(uint8 percent)
 
   //TODO: Set interrupt here and determine pin to connect gauge alert
   //FIXFIXFIXgpio_set_mode(GPIOA, 1, GPIO_INPUT_PP);
+}
+
+/*
+gauge_voltage() returns a 12-bit ADC reading of the battery voltage,
+as reported by the MAX17043's VCELL register.
+This does not return a voltage value. To convert this to a voltage,
+multiply by 5 and divide by 4096.
+*/
+//TODO: Determine output string length to perform input length verification
+void gauge_voltage(char *str, int length)
+{
+  unsigned int vcell;
+  
+  vcell = i2cRead16(0x02);
+  vcell = vcell >> 4;  // last 4 bits of vcell are nothing
+  batVoltage = (float) vcell * 1/800;
+
+  sprintf(str, "%02f", (double)batVoltage);
+  //return vcell;
+}
+
+/*
+gauge_percent() returns a float value of the battery percentage
+reported from the SOC register of the MAX17043.
+*/
+//TODO: Determine output string length to perform input length verification
+void gauge_percent(char *str, int length)
+{
+  unsigned int soc;
+  float percent;
+  
+  soc = i2cRead16(0x04);  // Read SOC register of MAX17043
+  percent = (byte) (soc >> 8);  // High byte of SOC is percentage
+  percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
+  
+  sprintf(str, "%02f", (double)percent);
+  //return percent;
+}
+
+float gauge_percentFloat(void)
+{
+  unsigned int soc;
+  float percent;
+  
+  soc = i2cRead16(0x04);  // Read SOC register of MAX17043
+  percent = (byte) (soc >> 8);  // High byte of SOC is percentage
+  percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
+  return percent;
 }

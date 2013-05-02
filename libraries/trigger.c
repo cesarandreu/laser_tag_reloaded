@@ -25,16 +25,24 @@
  * SOFTWARE.
  *****************************************************************************/
 
+#include "trigger.h"
 
-#include "GPS.h"
-
-#define TRIGGER_PORT GPIOC
-#define TRIGGER_PIN 14
+//#define TRIGGER_PORT GPIOC
+//#define TRIGGER_PIN 14
+#define TRIGGER_PORT GPIOA
+#define TRIGGER_PIN 13
 
 voidFuncPtr trigger_handler;
 
+void trigger_defaultInterrupt(void)
+{	
+	return;
+}
+
 void trigger_start(void){
 	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);
+	trigger_handler = trigger_defaultInterrupt;
+	exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, handler, EXTI_RISING);
 }
 
 void trigger_end(void){
@@ -43,13 +51,13 @@ void trigger_end(void){
 
 void trigger_set_interrupt(voidFuncPtr handler){
 	trigger_handler = handler;
-	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, handler, EXTI_RISING);
+	exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, handler, EXTI_RISING);
 }
 
 void trigger_enable_interrupt(void){
-	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, trigger_handler, EXTI_RISING);
+	exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, trigger_handler, EXTI_RISING);
 }
 
 void trigger_disable_interrupt(void){
-	exti_detach_interrupt(AFIO_EXTI_14);
+	exti_detach_interrupt(AFIO_EXTI_13);
 }
