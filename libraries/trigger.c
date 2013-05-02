@@ -32,12 +32,12 @@
 #define TRIGGER_PORT GPIOA
 #define TRIGGER_PIN 13
 
-voidFuncPtr trigger_handler = trigger_defaultInterrupt;
-
 void trigger_defaultInterrupt(void)
-{	
-	return;
+{   
+    return;
 }
+
+voidFuncPtr trigger_handler = trigger_defaultInterrupt;
 
 void trigger_start(void){
 	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);

@@ -13,7 +13,7 @@ extern "C" {
 #include "player.h"
 #include "receiver.h"
 #include "receiverBack.h"
-#include "receivedCommon.h"
+#include "receiverCommon.h"
 #include "sender.h"
 #include "speaker.h"
 #include "storage.h"
