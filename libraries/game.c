@@ -11,14 +11,23 @@
 
 //Testing
 //--{
-/*
-#include <libmaple/gpio.h>
-#include <libmaple/exti.h>
 
+//#include <libmaple/gpio.h>
+//#include <libmaple/exti.h>
+/*
 void game_triggerButton(void){
-    sender_shoot();
+
     player_shoot();
-    speaker_playShoot();
+
+    int receivedCode = 32;
+
+    char gps_location[25] = "SOME GPS LOCATION... 123";
+
+    if(enemy_checkExist(receivedCode)!=0){
+        storage_add(receivedCode, gps_location);
+        transmit_hitData(storage_getShot());
+        transmit_playerData(player_getShots());
+    }
 }
 */
 //--}
@@ -27,7 +36,9 @@ void game_receiverInterrupt(void){
     int receivedCode = receiver_listenSignal();
 
     //Should use GPS_COORDINATE_LENGTH
-    char gps_location[25] = "SOME GPS LOCATION... 123";
+    //char gps_location[25] = "SOME GPS LOCATION... 123";
+    char gps_location[25] = "GPS_DATA_NOT_VALID_SORRY";
+
 
     if(receivedCode>0 && receivedCode<=256){
 
@@ -61,8 +72,8 @@ void game_new(void){
     player_start(DEFAULT_PLAYER_CODE);
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
-    receiver_setInterrupt(game_receiverInterrupt);
     storage_start();
+    receiver_setInterrupt(game_receiverInterrupt);
 
     //Some function to set the trigger button as an input, but not enable its interrupt.
 
@@ -76,6 +87,11 @@ void game_start(void){
 
     //Testing, remove later.
     //--{
+    
+    //Onboard button
+    //gpio_set_mode(GPIOB, 8, GPIO_INPUT_PD);
+    //exti_attach_interrupt(AFIO_EXTI_8, AFIO_EXTI_PB, game_triggerButton, EXTI_RISING);
+
     //gpio_set_mode(GPIOA, 13, GPIO_INPUT_PD);
     //exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, game_triggerButton, EXTI_RISING);
     //--}
@@ -101,6 +117,10 @@ void game_end(int statusCode){
     //Testing, remove later.
     //--{
     //exti_detach_interrupt(AFIO_EXTI_13);
+
+    //Onboard button
+    //exti_detach_interrupt(AFIO_EXTI_8);
+
     //--}
 
     receiver_disable();
