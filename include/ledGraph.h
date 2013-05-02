@@ -10,6 +10,7 @@ extern "C" {
 #include <libmaple/gpio.h>
 #include <libmaple/exti.h>
 #include <libmaple/timer.h>
+#include "fuelGauge.h"
 
 void writeLed(void);
 void offLeds(void);
