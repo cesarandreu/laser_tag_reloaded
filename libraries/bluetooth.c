@@ -86,7 +86,3 @@ void bluetooth_printlnChar(char c){
 void bluetooth_flush(void){
     usart_reset_rx(BLUETOOTH_USART);
 }
-
-
-
-

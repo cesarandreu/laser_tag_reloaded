@@ -136,7 +136,3 @@ void usb_printlnChar(char c){
     usb_writeChar(c);
     usb_println();
 }
-
-
-
-

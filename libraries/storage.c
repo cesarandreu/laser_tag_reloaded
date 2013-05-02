@@ -107,15 +107,3 @@ void storage_add(int id, char* gps){
     storage_increaseNumberHits();
     storage_increaseList();
 }
-
-
-
-
-
-
-
-
-
-
-
-

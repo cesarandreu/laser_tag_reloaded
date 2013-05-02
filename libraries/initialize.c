@@ -233,5 +233,3 @@ void init(void) {
     disableDebugPorts();
 
 }
-
-

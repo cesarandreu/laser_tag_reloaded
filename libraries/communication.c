@@ -573,6 +573,3 @@ void communication_start(void){
     exti_attach_interrupt(BLUETOOTH_AFIO_EXTI_PIN, BLUETOOTH_AFIO_EXTI_PORT, received_bluetooth, EXTI_RISING);
 
 }
-
-
-
