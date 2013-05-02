@@ -152,7 +152,7 @@ void gauge_percent(char *str, int length)
   percent = (byte) (soc >> 8);  // High byte of SOC is percentage
   percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
   
-  sprintf(str, "%02f", (double)batPercentage);
+  sprintf(str, "%02f", (double)percent);
   //return percent;
 }
 
