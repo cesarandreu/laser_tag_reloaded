@@ -138,9 +138,9 @@ void response_connected(void){
 #define BUFFER_SIZE 128
 #define CHAR_MAX 4
 char receive_buffer[BUFFER_SIZE] = {' '};
-int receive_position = 1;
-int receive_startTag = 0;
-int receive_endTag = 0;
+volatile int receive_position = 1;
+volatile int receive_startTag = 0;
+volatile int receive_endTag = 0;
 char receive_nextChar[CHAR_MAX] = {' '};
 
 int receive_getNext(int position){
@@ -475,6 +475,11 @@ void received_resetBuffer(void){
     receive_startTag = 0;
     receive_endTag = 0;
     receive_position = 1;
+
+    //Added to prevent some potential bug.
+    //Should be updated to something like bluetooth_reset_rx().
+    usart_reset_rx(BLUETOOTH_USART);
+
 }
 
 void receive_processString(void){
@@ -492,11 +497,13 @@ void receive_processString(void){
     
     //If it does not have a comma after the message type, it returns.
     if(receive_buffer[receive_startTag+2]!=','){
+        received_resetBuffer();
         return;
     }
     
     //If it does not have a comma before the final #, it returns.
     if(receive_buffer[receive_endTag-1]!=','){
+        received_resetBuffer();
         return;
     }
     
@@ -559,6 +566,10 @@ void received_bluetooth(void){
     //startTag cannot be zero. endTag cannot be zero.
     //endTag must be bigger than startTag.
     if(receive_startTag!=0 && receive_endTag!=0 && (receive_endTag - receive_startTag)>0 && receive_endTag>receive_startTag){
+
+        //Testing
+        //bluetooth_printlnString(receive_buffer);
+
         receive_processString();
     }
     

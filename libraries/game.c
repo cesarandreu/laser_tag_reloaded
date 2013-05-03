@@ -32,6 +32,8 @@ void game_triggerInterrupt(void){
 }
 
 void game_receiverInterruptA(void){
+    nvic_globalirq_disable();
+
     int receivedCode = receiver_listenSignal();
 
     //Should use GPS_COORDINATE_LENGTH
@@ -54,16 +56,22 @@ void game_receiverInterruptA(void){
         //After the 5 seconds are up, it enables the received again and shooter. 
         }
 
-    } else {
+    } 
+    /*
+    else {
         hit toSend = storage_getShot();
         if(toSend.ID!=0){
             transmit_hitData(toSend);
         }
 
     }
+    */
+    nvic_globalirq_enable();
 }
 
 void game_receiverInterruptB(void){
+    nvic_globalirq_disable();
+
     int receivedCode = receiverB_listenSignal();
 
     //Should use GPS_COORDINATE_LENGTH
@@ -86,13 +94,17 @@ void game_receiverInterruptB(void){
         //After the 5 seconds are up, it enables the received again and shooter. 
         }
 
-    } else {
+    } 
+    /*
+    else {
         hit toSend = storage_getShot();
         if(toSend.ID!=0){
             transmit_hitData(toSend);
         }
-
     }
+    */
+
+    nvic_globalirq_enable();
 }
 
 void game_new(void){
@@ -158,10 +170,11 @@ void game_end(int statusCode){
     //--{
     //exti_detach_interrupt(AFIO_EXTI_13);
     //--}
-    
+
     trigger_disable_interrupt();
-    
+
     receiver_disable();
+
     receiverB_disable();
 
     gps_end();
@@ -169,6 +182,7 @@ void game_end(int statusCode){
     transmit_playerData(player_getShots());
 
     player_reset();
+
     enemy_reset();
 
     //Get all the remaining data and transmit it. 

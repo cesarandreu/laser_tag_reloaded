@@ -11,7 +11,7 @@
 
 
 //The number assigned with a hit.
-int numberOfHits = 1;
+volatile int numberOfHits = 1;
 
 //Array of shots.
 //All are initialized to zero. 
@@ -19,7 +19,7 @@ hit shot_List[MAXIMUM_NUMBER_HITS] = {0, NULL_TERMINATED_GPS_STRING, 0};
 
 //The position we are in on the array. 
 //This gets looped to zero once it reaches MAXIMUM_NUMBER_HITS-1. 
-int shot_listPosition = 0;
+volatile int shot_listPosition = 0;
 
 //Returns al entries that do not have an ID of zero.
 int storage_unsentEntries(void){
@@ -60,7 +60,6 @@ void storage_resetEntry(int position){
     shot_List[position].ID = 0;
     strcpy(shot_List[position].location, NULL_TERMINATED_GPS_STRING);
     shot_List[position].hitNumber = 0;
-
 }
 
 //Returns the number it removed.

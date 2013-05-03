@@ -1,7 +1,7 @@
 #include "player.h"
 
 int code = DEFAULT_PLAYER_CODE;
-int shotsFired = DEFAULT_SHOTS_FIRED;
+volatile int shotsFired = DEFAULT_SHOTS_FIRED;
 
 void player_start(int pCode){
     code = pCode;
