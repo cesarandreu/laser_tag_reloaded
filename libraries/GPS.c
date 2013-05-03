@@ -51,7 +51,7 @@
 
 #define NMEA_MAX_MESSAGE_LENGTH 82
 
-char location[25] = {'\0'};
+char location[25] = "                        "; //{'\0'};
 int location_flag = 0;
 
 //=============BUFFER IMPLEMENTATION===================
@@ -79,14 +79,14 @@ void buffer_reset(){
 
 //Get a GPRMC string from the GPS USART
 void received_gps(void){
-    if(location_flag == 1)
-    {
-        return;
-    }
-    nvic_irq_disable(GPS_INT_PIN);
+    //if(location_flag == 1)
+    //{
+    //    return;
+    //}
+    //nvic_irq_disable(GPS_INT_PIN);
     if(!gps_available())
     {
-        nvic_irq_enable(GPS_INT_PIN);
+        //nvic_irq_enable(GPS_INT_PIN);
         return;
     }
     while(gps_available())
@@ -95,15 +95,16 @@ void received_gps(void){
         if(!start_flag)
         {
             //gpio_write_bit(GPIOB, 1, 1);
-            gps_buffer[buffer_position] = gps_read();
-            if(gps_buffer[buffer_position] != '$')
+            gps_buffer[0] = gps_read();
+            if(gps_buffer[0] != '$')
             {
                 continue;
             }
             //gpio_write_bit(GPIOB, 1, 1);
             //gps_buffer[buffer_position] = '$';
-            buffer_start = buffer_position;
-            buffer_position++;
+            buffer_start = 0;
+            /*buffer_position++;*/
+            buffer_position = 1;
             start_flag = 1;
             continue;
             //gpio_write_bit(GPIOB, 1, 1);
@@ -150,7 +151,7 @@ void received_gps(void){
         }
         buffer_position++;
     }
-    nvic_irq_enable(GPS_INT_PIN);
+    //nvic_irq_enable(GPS_INT_PIN);
 }
 
 //=============END BUFFER IMPLEMENTATION===============
@@ -176,12 +177,17 @@ uint32 gps_available(void){
 }
 
 uint8 gps_read(void){
-    while(!gps_available());
-    return usart_getc(GPS_USART);
+    if(usart_data_available(GPS_USART)!=0){
+        return usart_getc(GPS_USART);    
+    } else {
+        return '0';
+    }
+    
 }
 
 //Read GPS string up to the specified length or the end of that string, whichever comes first.
 //Returns the amount of characters read from the GPS String
+/*
 int gps_readString(char *str, int length){
     char c = ' ';
     int i = 0;
@@ -192,10 +198,12 @@ int gps_readString(char *str, int length){
     }
     return i;
 }
+*/
 
 //Return 0 if string is invalid size
 //Return 1 if valid string is sent
 //Maximum message string length is of size 83 including the null termination character
+/*
 uint8 gps_readMessage(char *str, int length){
     //timer_pause(GPS_TIMER);
     if(length < NMEA_MAX_MESSAGE_LENGTH+1)
@@ -214,6 +222,7 @@ uint8 gps_readMessage(char *str, int length){
     //timer_resume(GPS_TIMER);
     return 1;
 }
+*/
 
 void gps_write(unsigned char ch){
     usart_putc(GPS_USART, ch);
@@ -225,7 +234,7 @@ void gps_write(unsigned char ch){
 //The resulting string will be formatted as xxmm.dddd,<N|S>,yyymm.dddd,<E|W>
 //The resulting string size will contain 24 characters, excluding the null-termination character.
 int gps_getLocation(char *str, int length){
-    nvic_irq_disable(GPS_INT_PIN);
+    //nvic_irq_disable(GPS_INT_PIN);
     //timer_pause(GPS_TIMER);
     //gps_enable();
 
@@ -235,7 +244,7 @@ int gps_getLocation(char *str, int length){
     if(length != 24+1)
     {
         //timer_resume(GPS_TIMER);
-        nvic_irq_enable(GPS_INT_PIN);
+        //nvic_irq_enable(GPS_INT_PIN);
         return 0;
     }
     //gpio_write_bit(GPIOB, 1, 1);
@@ -244,12 +253,12 @@ int gps_getLocation(char *str, int length){
     {
         //gps_buffer[100-2] = '#';
         //strcpy(str, gps_buffer);
-        nvic_irq_enable(GPS_INT_PIN);
-        gpio_write_bit(GPIOB, 1, 0);
+        //nvic_irq_enable(GPS_INT_PIN);
+        //gpio_write_bit(GPIOB, 1, 0);
         return 0;
     }
 
-    gpio_write_bit(GPIOB, 1, 1);
+    //gpio_write_bit(GPIOB, 1, 1);
     //Find the string that contains the coordinates from the GPS output
     //char tmp_str[25];
     int x;
@@ -272,13 +281,13 @@ int gps_getLocation(char *str, int length){
     strcpy(str, location);
     //strcpy(str, gps_buffer);
 
-    nvic_irq_enable(GPS_INT_PIN);
+    //nvic_irq_enable(GPS_INT_PIN);
     return 1;
 }
 
 uint8 gps_hasFix(void){
 
-    if(gps_buffer[buffer_start] != '$')
+    if(gps_buffer[0] != '$')
     {
         //buffer_position = 0;
         buffer_reset();
@@ -310,7 +319,7 @@ uint8 gps_hasFix(void){
 }
 
 
-void gps_warmRefresh(void){
+//void gps_warmRefresh(void){
     //int waitCount = 0;
     //Check for fix 20 times or until fix is found, whichever comes first
     /*while((gps_hasFix() == 0 || gps_hasFix() == 2) && waitCount < 20)
@@ -318,11 +327,12 @@ void gps_warmRefresh(void){
         waitCount++;
     }*/
     //gps_disable();
-}
+//}
+
 
 //int value = 0; //FOR TESTING
 
-void gps_coldRefresh(void){
+//void gps_coldRefresh(void){
     //timer_pause(GPS_TIMER);
     //received_gps();
     //gpio_write_bit(GPIOB, 1, 1);
@@ -352,7 +362,7 @@ void gps_coldRefresh(void){
     }*/
     //timer_set_count(GPS_TIMER, 0);
     //timer_resume(GPS_TIMER);
-}
+//}
 
 void gps_start(void){
     //TEST
@@ -374,8 +384,8 @@ void gps_start(void){
     usart_putstr(GPS_USART, "$PMTK301,2*2E\r\n");
 
     //Test LED
-    gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
-    gpio_write_bit(GPIOB, 1, 0);
+    //gpio_set_mode(GPIOB, 1, GPIO_OUTPUT_PP);
+    //gpio_write_bit(GPIOB, 1, 0);
 
     buffer_reset();
 
@@ -394,4 +404,12 @@ void gps_start(void){
     timer_generate_update(GPS_TIMER);
     timer_resume(GPS_TIMER);
     */
+}
+
+void gps_enableInterrupt(void){
+    exti_attach_interrupt(GPS_INT_PIN, GPS_INT_PORT, received_gps, EXTI_FALLING);
+}
+
+void gps_disableInterrupt(void){
+    exti_detach_interrupt(GPS_INT_PIN);
 }

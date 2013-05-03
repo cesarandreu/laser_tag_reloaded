@@ -450,7 +450,7 @@ void receive_gameAcknowledge(void){
     //This would mean that the hit number was not stored.
     
     //Returns the number it removed, if we ever wanna do something with that.
-    storage_removeHit(numberAcknowledged);
+    numberAcknowledged = storage_removeHit(numberAcknowledged);
 
     //Then responds to bluetooth saying it removed it.
     response_hitAcknowledged(numberAcknowledged);

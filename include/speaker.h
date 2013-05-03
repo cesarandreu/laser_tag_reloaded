@@ -35,6 +35,8 @@ extern "C" {
 #include <libmaple/libmaple.h>
 #include <libmaple/timer.h>
 
+#include "GPS.h"
+
 typedef timer_mode TimerMode;
 
 

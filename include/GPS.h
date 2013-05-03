@@ -51,6 +51,8 @@ uint8 gps_hasFix(void);
 void getLocation(char *str, int length);
 void gps_enable(void);
 void gps_disable(void);
+void gps_enableInterrupt(void);
+void gps_disableInterrupt(void);
 
 #ifdef __cplusplus
 }
