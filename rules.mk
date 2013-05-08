@@ -78,7 +78,7 @@ cSRCS_$(d) += libraries/game.c
 cSRCS_$(d) += libraries/trigger.c
 cSRCS_$(d) += libraries/receiverBack.c
 cSRCS_$(d) += libraries/ledGraph.c
-
+cSRCS_$(d) += libraries/delay.c
 
 
 
