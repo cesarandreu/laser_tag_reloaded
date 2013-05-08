@@ -69,8 +69,18 @@ unsigned int i2cRead16(unsigned char address)
   i2c_endTransmission();
   
   i2c_requestFrom(MAX17043_ADDRESS, 2);
-  while (i2c_available() < 2)
-    ;
+  //New i2c code, with maximum delay
+  int i2cwait = 0;
+  while(i2c_available() < 2 && i2cwait < 100)
+  {
+    i2cwait++;
+  }
+  if(i2cwait == 100)
+  {
+    return 0;
+  }
+  //while (i2c_available() < 2)
+  //    ;
   data = ((int) i2c_receive()) << 8;
   data |= i2c_receive();
   

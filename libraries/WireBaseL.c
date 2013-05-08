@@ -33,7 +33,7 @@
 
 /*
  * Library created by crenn to allow a system which would provide users the
- * 'standardised' Arduino method for interfacing with I2C devices regardless of
+ * 'standardised' method for interfacing with I2C devices regardless of
  * whether it is I2C hardware or emulating software.
  */
 
