@@ -129,6 +129,7 @@ void receiver_start(void){
 
 void receiver_setInterrupt(voidFuncPtr pointer){
   handler = pointer;
+  exti_attach_interrupt(RECEIVER_EXTI_LINE, RECEIVER_EXTI_PORT, handler, EXTI_FALLING);
 }
 
 void receiver_disable(void){

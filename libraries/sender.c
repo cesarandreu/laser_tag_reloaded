@@ -10,8 +10,8 @@
 #define SENDER_PIN 14
 
 //Comment out one and leave the other depending on which frequency you wish to use. 
-#define _38KHZ
-//#define _56KHZ
+//#define _38KHZ
+#define _56KHZ
 
 #ifdef _56KHZ 
   #define SEND_DELAY 6

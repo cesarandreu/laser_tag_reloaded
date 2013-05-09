@@ -42,6 +42,7 @@ void trigger_end(void);
 void trigger_set_interrupt(voidFuncPtr);
 void trigger_enable_interrupt(void);
 void trigger_disable_interrupt(void);
+void trigger_delay_start(void);
 
 #ifdef __cplusplus
 }

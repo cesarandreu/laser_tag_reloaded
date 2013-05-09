@@ -29,6 +29,7 @@ void game_triggerInterrupt(void){
     sender_shoot();
     player_shoot();
     speaker_playShoot();
+    trigger_delay_start();
 }
 
 void game_receiverInterruptA(void){
@@ -67,6 +68,7 @@ void game_receiverInterruptA(void){
     }
     */
     nvic_globalirq_enable();
+    delay_start();
 }
 
 void game_receiverInterruptB(void){
@@ -105,6 +107,7 @@ void game_receiverInterruptB(void){
     */
 
     nvic_globalirq_enable();
+    delay_start();
 }
 
 void game_new(void){
@@ -113,6 +116,7 @@ void game_new(void){
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
     storage_start();
+    batteryMonitor_initialize();
     gps_start();
 
 
@@ -133,6 +137,7 @@ void game_start(void){
     receiver_start();
     receiverB_start();
     trigger_start();
+    delay_init();
 
 
     //Some function to set the trigger button's interrupt.

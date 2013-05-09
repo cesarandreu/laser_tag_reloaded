@@ -2,6 +2,7 @@
 #include "receiver.h"
 #include "receiverBack.h"
 #include "trigger.h"
+//#include <libmaple/gpio.h>
 
 #define DELAY_TIMER TIMER1
 #define DELAY_TIMER_CH TIMER_CH2
@@ -12,9 +13,10 @@
 #define CYCLES_PER_MICROSECOND 72
 
 void delay_defaultInterrupt(){
-	trigger_enableInterrupt();
+	trigger_enable_interrupt();
 	receiver_enable();
 	receiverB_enable();
+	//gpio_write_bit(GPIOB, 1, 1);
 	timer_pause(DELAY_TIMER);
 }
 
@@ -51,8 +53,9 @@ void delay_init(){
 }
 
 void delay_start(){
-	trigger_disableInterrupt();
+	trigger_disable_interrupt();
 	receiver_disable();
 	receiverB_disable();
+	//gpio_write_bit(GPIOB, 1, 0);
 	timer_resume(DELAY_TIMER);
 }
