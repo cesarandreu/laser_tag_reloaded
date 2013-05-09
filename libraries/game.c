@@ -39,17 +39,15 @@ void game_receiverInterruptA(void){
 
     //Should use GPS_COORDINATE_LENGTH
     char gps_location[25] = "GPS_DATA_NOT_VALID_SORRY";
-    //gps_getLocation(gps_location, 25);
 
     if(receivedCode>0 && receivedCode<=256){
 
         if(enemy_checkExist(receivedCode)!=0){
 
-        //Some function to turn on GPS and the location data.
-        //gps_getLocation(gps_location);
-        transmit_hitData(storage_add(receivedCode, gps_location));
-        transmit_playerData(player_getShots());
-        speaker_playHit();
+            gps_getLocation(gps_location, 25);            
+            transmit_hitData(storage_add(receivedCode, gps_location));
+            transmit_playerData(player_getShots());
+            speaker_playHit();
 
         //Some function that sets up a timer and disables the received and shooter.
         //Then it waits like 5~ seconds.
@@ -57,17 +55,9 @@ void game_receiverInterruptA(void){
         }
 
     } 
-    /*
-    else {
-        hit toSend = storage_getShot();
-        if(toSend.ID!=0){
-            transmit_hitData(toSend);
-        }
 
-    }
-    */
-    nvic_globalirq_enable();
     delay_start();
+    nvic_globalirq_enable();
 }
 
 void game_receiverInterruptB(void){
@@ -77,35 +67,22 @@ void game_receiverInterruptB(void){
 
     //Should use GPS_COORDINATE_LENGTH
     char gps_location[25] = "GPS_DATA_NOT_VALID_SORRY";
-    //gps_getLocation(gps_location, 25);
 
     if(receivedCode>0 && receivedCode<=256){
 
         if(enemy_checkExist(receivedCode)!=0){
 
-        //Some function to turn on GPS and the location data.
-        //gps_getLocation(gps_location);
-        transmit_hitData(storage_add(receivedCode, gps_location));
-        transmit_playerData(player_getShots());
-        speaker_playHit();
+            gps_getLocation(gps_location, 25);
+            transmit_hitData(storage_add(receivedCode, gps_location));
+            transmit_playerData(player_getShots());
+            speaker_playHit();
 
-        //Some function that sets up a timer and disables the received and shooter.
-        //Then it waits like 5~ seconds.
-        //After the 5 seconds are up, it enables the received again and shooter. 
         }
 
     } 
-    /*
-    else {
-        hit toSend = storage_getShot();
-        if(toSend.ID!=0){
-            transmit_hitData(toSend);
-        }
-    }
-    */
 
-    nvic_globalirq_enable();
     delay_start();
+    nvic_globalirq_enable();
 }
 
 void game_new(void){
@@ -130,21 +107,12 @@ void game_new(void){
 void game_start(void){
 
     receiver_enable();
-    //receiverB_enable();
+    receiverB_enable();
 
     receiver_start();
     receiverB_start();
     trigger_start();
     delay_init();
-
-
-    //Some function to set the trigger button's interrupt.
-
-    //Testing, remove later.
-    //--{
-    //gpio_set_mode(GPIOA, 13, GPIO_INPUT_PD);
-    //exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, game_triggerButton, EXTI_RISING);
-    //--}
 
 }
 
@@ -165,14 +133,6 @@ void game_end(int statusCode){
     //Sender.c does not turn off.
 
     //Speaker.c does not turn off.
-
-
-    //Some function to disable the trigger button's interrupt.
-    
-    //Testing, remove later.
-    //--{
-    //exti_detach_interrupt(AFIO_EXTI_13);
-    //--}
 
     trigger_disable_interrupt();
 
