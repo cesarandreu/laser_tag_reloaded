@@ -127,7 +127,7 @@ void game_new(void){
 
 void game_start(void){
 
-    //receiver_enable();
+    receiver_enable();
     //receiverB_enable();
 
     receiver_start();
