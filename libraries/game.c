@@ -26,10 +26,14 @@ void game_triggerButton(void){
 //--}
 
 void game_triggerInterrupt(void){
+    nvic_globalirq_disable();
+
     sender_shoot();
     player_shoot();
     speaker_playShoot();
-    trigger_delay_start();
+    //trigger_delay_start();
+
+    nvic_globalirq_enable();
 }
 
 void game_receiverInterruptA(void){
@@ -44,10 +48,13 @@ void game_receiverInterruptA(void){
 
         if(enemy_checkExist(receivedCode)!=0){
 
-            gps_getLocation(gps_location, 25);            
+            gps_getLocation(gps_location, 25); 
+
             transmit_hitData(storage_add(receivedCode, gps_location));
             transmit_playerData(player_getShots());
             speaker_playHit();
+
+            delay_start();
 
         //Some function that sets up a timer and disables the received and shooter.
         //Then it waits like 5~ seconds.
@@ -56,11 +63,11 @@ void game_receiverInterruptA(void){
 
     } 
 
-    delay_start();
     nvic_globalirq_enable();
 }
 
 void game_receiverInterruptB(void){
+
     nvic_globalirq_disable();
 
     int receivedCode = receiverB_listenSignal();
@@ -73,15 +80,16 @@ void game_receiverInterruptB(void){
         if(enemy_checkExist(receivedCode)!=0){
 
             gps_getLocation(gps_location, 25);
+
             transmit_hitData(storage_add(receivedCode, gps_location));
             transmit_playerData(player_getShots());
             speaker_playHit();
+            delay_start();
 
         }
 
     } 
 
-    delay_start();
     nvic_globalirq_enable();
 }
 
@@ -91,28 +99,28 @@ void game_new(void){
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
     storage_start();
-    batteryMonitor_initialize();
+
     gps_start();
 
-
     trigger_set_interrupt(game_triggerInterrupt);
-
     receiver_setInterrupt(game_receiverInterruptA);
     receiverB_setInterrupt(game_receiverInterruptB);
 
-    //Some function to set the trigger button as an input, but not enable its interrupt.
+    delay_init();
 
 }
 
 void game_start(void){
 
-    receiver_enable();
-    receiverB_enable();
-
+    //receiver_enable();
     receiver_start();
+
+
+    //receiverB_enable();
     receiverB_start();
+
+
     trigger_start();
-    delay_init();
 
 }
 
@@ -135,17 +143,14 @@ void game_end(int statusCode){
     //Speaker.c does not turn off.
 
     trigger_disable_interrupt();
-
     receiver_disable();
 
     receiverB_disable();
-
     gps_end();
 
+
     transmit_playerData(player_getShots());
-
     player_reset();
-
     enemy_reset();
 
     //Get all the remaining data and transmit it. 

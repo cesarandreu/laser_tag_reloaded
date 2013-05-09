@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 #include "communication.h"
+#include "delay.h"
 #include "enemy.h"
 #include "GPS.h"
 #include "player.h"

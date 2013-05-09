@@ -10,6 +10,9 @@ extern "C" {
 #include <libmaple/gpio.h>
 #include <libmaple/exti.h>
 #include <libmaple/timer.h>
+#include "receiver.h"
+#include "receiverBack.h"
+#include "trigger.h"
 
 void delay_defaultInterrupt();
 void delay_setInterrupt(voidFuncPtr);
