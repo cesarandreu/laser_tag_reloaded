@@ -45,9 +45,8 @@ void game_receiverInterruptA(void){
         if(enemy_checkExist(receivedCode)!=0){
 
         //Some function to turn on GPS and the location data.
-        gps_getLocation(gps_location);
-        storage_add(receivedCode, gps_location);
-        transmit_hitData(storage_getShot());
+        //gps_getLocation(gps_location);
+        transmit_hitData(storage_add(receivedCode, gps_location));
         transmit_playerData(player_getShots());
         speaker_playHit();
 
@@ -83,9 +82,8 @@ void game_receiverInterruptB(void){
         if(enemy_checkExist(receivedCode)!=0){
 
         //Some function to turn on GPS and the location data.
-        gps_getLocation(gps_location);
-        storage_add(receivedCode, gps_location);
-        transmit_hitData(storage_getShot());
+        //gps_getLocation(gps_location);
+        transmit_hitData(storage_add(receivedCode, gps_location));
         transmit_playerData(player_getShots());
         speaker_playHit();
 
@@ -113,13 +111,13 @@ void game_new(void){
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
     storage_start();
-    gps_start();
+    //gps_start();
 
 
     trigger_set_interrupt(game_triggerInterrupt);
 
     receiver_setInterrupt(game_receiverInterruptA);
-    receiverB_setInterrupt(game_receiverInterruptB);
+    //receiverB_setInterrupt(game_receiverInterruptB);
 
     //Some function to set the trigger button as an input, but not enable its interrupt.
 
@@ -131,7 +129,8 @@ void game_start(void){
     //receiverB_enable();
 
     receiver_start();
-    receiverB_start();
+    //receiverB_start();
+
     trigger_start();
 
 
@@ -175,9 +174,9 @@ void game_end(int statusCode){
 
     receiver_disable();
 
-    receiverB_disable();
+    //receiverB_disable();
 
-    gps_end();
+    //gps_end();
 
     transmit_playerData(player_getShots());
 
