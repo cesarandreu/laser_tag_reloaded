@@ -15,7 +15,7 @@ extern "C" {
 typedef struct hit {
     int ID; //ID of the player that hit you.
     char location[MAXIMUM_GPS_LENGTH]; // GPS String of location where you got hit.
-    int hitNumber; //Number asociated with a shot
+    volatile int hitNumber; //Number asociated with a shot
 } hit;
 
 int storage_unsentEntries(void);
@@ -26,7 +26,7 @@ int storage_removeHit(int);
 //void storage_increaseNumberHits(void);
 void storage_start(void);
 void storage_reset(void);
-void storage_add(int, char*);
+hit storage_add(int, char*);
 
 #ifdef __cplusplus
 }

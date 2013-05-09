@@ -108,10 +108,17 @@ void storage_reset(void){
     }
 }
 
-void storage_add(int id, char* gps){
+hit storage_add(int id, char* gps){
+
+    int position = shot_listPosition;
+
     shot_List[shot_listPosition].ID = id;
     strcpy(shot_List[shot_listPosition].location, gps);
     shot_List[shot_listPosition].hitNumber = numberOfHits;
+
     storage_increaseNumberHits();
     storage_increaseList();
+
+    return shot_List[position];
+
 }
