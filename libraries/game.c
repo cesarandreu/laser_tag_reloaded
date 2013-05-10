@@ -30,7 +30,7 @@ void game_receiverA_Interrupt(void){
             //Some function that sets up a timer and disables the received and shooter.
             //Then it waits like 5~ seconds.
             //After the 5 seconds are up, it enables the received again and shooter. 
-            //delay_begin();
+            delay_start();
         }
 
     }
@@ -60,7 +60,7 @@ void game_receiverB_Interrupt(void){
             //Some function that sets up a timer and disables the received and shooter.
             //Then it waits like 5~ seconds.
             //After the 5 seconds are up, it enables the received again and shooter. 
-            //delay_begin();
+            delay_start();
         }
 
     }
@@ -76,8 +76,6 @@ void game_new(void){
     speaker_start();
     storage_start();
 
-    //delay_start();
-
     trigger_setInterrupt(game_triggerButton);
     receiverA_setInterrupt(game_receiverA_Interrupt);
     receiverB_setInterrupt(game_receiverB_Interrupt);
@@ -85,9 +83,11 @@ void game_new(void){
 }
 
 void game_start(void){
+
     trigger_start();
     receiverA_start();
     receiverB_start();
+    delay_init();
 
 }
 
