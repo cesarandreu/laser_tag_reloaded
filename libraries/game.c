@@ -7,6 +7,9 @@ void game_triggerButton(void){
     player_shoot();
     sender_shoot();
     speaker_playShoot();
+
+    trigger_delayStart();
+    
     nvic_globalirq_enable();
 
 }
