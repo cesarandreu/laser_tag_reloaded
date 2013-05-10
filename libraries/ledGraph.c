@@ -56,81 +56,85 @@
 #define BATTERY_LED9_PIN 14
 #define BATTERY_LED10_PIN 3
 
+/**
 #define BATTERY_TIMER TIMER1
 #define BATTERY_TIMER_CH TIMER_CH1
 #define BATTERY_PERIOD 5000000
 
 #define CYCLES_PER_MICROSECOND 72
+**/
+int batt_flag = 0;
 
 void writeLed(void){
 	int percent = gauge_percentFloat();
+	batt_flag = gpio_read_bit(BATTERY_BUTTON_PORT, BATTERY_BUTTON_PIN);
 	if(percent>=100){
-		gpio_write_bit(BATTERY_LED10_PORT, BATTERY_LED10_PIN,1);
-		gpio_write_bit(BATTERY_LED9_PORT, BATTERY_LED9_PIN,1);
-		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,1);
-		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,1);
-		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,1);
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED10_PORT, BATTERY_LED10_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED9_PORT, BATTERY_LED9_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=90){
-		gpio_write_bit(BATTERY_LED9_PORT, BATTERY_LED9_PIN,1);
-		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,1);
-		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,1);
-		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,1);
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED9_PORT, BATTERY_LED9_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=80){
-		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,1);
-		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,1);
-		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,1);
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED8_PORT, BATTERY_LED8_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=70){
-		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,1);
-		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,1);
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED7_PORT, BATTERY_LED7_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=60){
-		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,1);
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED6_PORT, BATTERY_LED6_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=50){
-		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,1);
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED5_PORT, BATTERY_LED5_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=40){
-		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,1);
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED4_PORT, BATTERY_LED4_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=30){
-		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,1);
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=20){
-		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,1);
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,batt_flag);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}else if(percent>=10){
-		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,1);
+		gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,batt_flag);
 	}
-	timer_resume(BATTERY_TIMER);
+	//timer_resume(BATTERY_TIMER);
 }
 
 void offLeds(void){
@@ -144,9 +148,10 @@ void offLeds(void){
 	gpio_write_bit(BATTERY_LED3_PORT, BATTERY_LED3_PIN,0);
 	gpio_write_bit(BATTERY_LED2_PORT, BATTERY_LED2_PIN,0);
 	gpio_write_bit(BATTERY_LED1_PORT, BATTERY_LED1_PIN,0);
-	timer_pause(BATTERY_TIMER);
+	//timer_pause(BATTERY_TIMER);
 }
 
+/*
 uint16 timer_setPeriod(uint32 microseconds){
     if(!microseconds){
         timer_set_prescaler(BATTERY_TIMER, 1);
@@ -161,6 +166,7 @@ uint16 timer_setPeriod(uint32 microseconds){
     timer_set_reload(BATTERY_TIMER, reload);
     return reload;
 }
+*/
 
 void batteryMonitor_initialize(void) {
 
@@ -177,13 +183,16 @@ void batteryMonitor_initialize(void) {
 	gpio_set_mode(BATTERY_LED9_PORT, BATTERY_LED9_PIN,GPIO_OUTPUT_PP);
 	gpio_set_mode(BATTERY_LED10_PORT, BATTERY_LED10_PIN,GPIO_OUTPUT_PP);
 	gpio_set_mode(BATTERY_BUTTON_PORT,BATTERY_BUTTON_PIN,GPIO_INPUT_PU);
-	exti_attach_interrupt(BATTERY_BUTTON_EXTI_LINE, BATTERY_BUTTON_EXTI_PORT, writeLed, EXTI_RISING);
+	//exti_attach_interrupt(BATTERY_BUTTON_EXTI_LINE, BATTERY_BUTTON_EXTI_PORT, writeLed, EXTI_RISING);
+	exti_attach_interrupt(BATTERY_BUTTON_EXTI_LINE, BATTERY_BUTTON_EXTI_PORT, writeLed, EXTI_RISING_FALLING);
 
+	/**
 	timer_init(BATTERY_TIMER);
 	timer_pause(BATTERY_TIMER);
 	timer_setPeriod(BATTERY_PERIOD);
 	timer_set_compare(BATTERY_TIMER, BATTERY_TIMER_CH, 1);
 	timer_set_mode(BATTERY_TIMER, BATTERY_TIMER_CH, TIMER_OUTPUT_COMPARE);
 	timer_attach_interrupt(BATTERY_TIMER, BATTERY_TIMER_CH, offLeds);
-	timer_generate_update(BATTERY_TIMER);	
+	timer_generate_update(BATTERY_TIMER);
+	**/
 }

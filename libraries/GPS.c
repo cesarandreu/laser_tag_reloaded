@@ -28,7 +28,6 @@
 
 #include "GPS.h"
 
-#include <libmaple/delay.h>
 #include <libmaple/nvic.h>
 
 #define GPS_BAUD 9600
@@ -158,18 +157,18 @@ void received_gps(void){
 
 void gps_disable(void){
     //usart_disable(GPS_USART);
-    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
+    //gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
 }
 
 void gps_enable(void){
     //usart_enable(GPS_USART);
-    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
+    //gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
 }
 
 void gps_end(void){
     //timer_disable(GPS_TIMER);
     usart_disable(GPS_USART);
-    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
+    //gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 0);
 }
 
 uint32 gps_available(void){
@@ -298,18 +297,14 @@ uint8 gps_hasFix(void){
     {
         return 0;
     }
-
-    //if(gps_buffer[buffer_start+1] != 'G' || gps_buffer[buffer_start+2] != 'P' || gps_buffer[buffer_start+3] != 'R' || gps_buffer[buffer_start+4] != 'M' || gps_buffer[buffer_start+5] != 'C')
+    
     if(gps_buffer[1] != 'G' || gps_buffer[2] != 'P' || gps_buffer[3] != 'R' || gps_buffer[4] != 'M' || gps_buffer[5] != 'C')
     {
         return 0;
     }
 
-    //if(gps_buffer[buffer_start+18] == 'A')
     if(gps_buffer[18] == 'A')
     {
-        //gpio_write_bit(GPIOB, 1, 1);
-        //location_flag = 1;
         return 1;
     }
     else
@@ -348,7 +343,6 @@ uint8 gps_hasFix(void){
     else
         value = 0;
     gpio_write_bit(GPIOB, 1, value);*/
-    //delay_us(100000);
 
     /*if(gps_hasFix() == 1)
     {
@@ -365,18 +359,14 @@ uint8 gps_hasFix(void){
 //}
 
 void gps_start(void){
-    //TEST
-    //timer_set_mode(TIMER1, TIMER_CH2, TIMER_DISABLED);
-    //timer_set_mode(TIMER1, TIMER_CH3, TIMER_DISABLED);
-
     usart_config_gpios_async(GPS_USART, GPS_PORT_RX, GPS_PIN_RX, GPS_PORT_TX, GPS_PIN_TX, 0);
     usart_init(GPS_USART);
     //nvic_irq_set_priority(GPS_USART->irq_num, 0);
     usart_set_baud_rate(GPS_USART, USART_USE_PCLK, GPS_BAUD);
 
     //Enable BJT to turn on GPS
-    gpio_set_mode(GPS_VDD_PORT, GPS_VDD_PIN, GPIO_OUTPUT_PP);
-    gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
+    //gpio_set_mode(GPS_VDD_PORT, GPS_VDD_PIN, GPIO_OUTPUT_PP);
+    //gpio_write_bit(GPS_VDD_PORT, GPS_VDD_PIN, 1);
     
     //Enable GPS USART Port
     usart_enable(GPS_USART);

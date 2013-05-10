@@ -44,13 +44,13 @@ void gps_start(void);
 void gps_end(void);
 uint32 gps_available(void);
 uint8 gps_read(void);
-int gps_readString(char *str, int length);
-uint8 gps_readMessage(char *str, int length);
+//int gps_readString(char *str, int length);
+//uint8 gps_readMessage(char *str, int length);
 void gps_write(unsigned char ch);
 uint8 gps_hasFix(void);
 void getLocation(char *str, int length);
-void gps_enable(void);
-void gps_disable(void);
+void gps_enable(void); //DEPRECATED
+void gps_disable(void); //DEPRECATED
 void gps_enableInterrupt(void);
 void gps_disableInterrupt(void);
 

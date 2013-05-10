@@ -56,6 +56,8 @@ void game_receiverInterruptA(void){
 
             delay_start();
 
+        delay_start();
+
         //Some function that sets up a timer and disables the received and shooter.
         //Then it waits like 5~ seconds.
         //After the 5 seconds are up, it enables the received again and shooter. 
