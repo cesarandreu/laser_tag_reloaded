@@ -7,9 +7,11 @@
 extern "C" {
 #endif
 
-#define MAXIMUM_NUMBER_HITS 128
+#define MAXIMUM_NUMBER_HITS 256
 #define MAXIMUM_GPS_LENGTH 25
 #define NULL_TERMINATED_GPS_STRING "                        "
+
+#include <string.h>
 
 //Defines a struct for hit. 
 typedef struct hit {
@@ -26,7 +28,7 @@ int storage_removeHit(int);
 //void storage_increaseNumberHits(void);
 void storage_start(void);
 void storage_reset(void);
-void storage_add(int, char*);
+hit storage_add(int, char*);
 
 #ifdef __cplusplus
 }

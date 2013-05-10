@@ -138,10 +138,10 @@ void response_connected(void){
 #define BUFFER_SIZE 128
 #define CHAR_MAX 4
 char receive_buffer[BUFFER_SIZE] = {' '};
-int receive_position = 1;
-int receive_startTag = 0;
-int receive_endTag = 0;
 char receive_nextChar[CHAR_MAX] = {' '};
+volatile int receive_position = 1;
+volatile int receive_startTag = 0;
+volatile int receive_endTag = 0;
 
 int receive_getNext(int position){
     int counter = 0;
@@ -450,7 +450,7 @@ void receive_gameAcknowledge(void){
     //This would mean that the hit number was not stored.
     
     //Returns the number it removed, if we ever wanna do something with that.
-    storage_removeHit(numberAcknowledged);
+    numberAcknowledged = storage_removeHit(numberAcknowledged);
 
     //Then responds to bluetooth saying it removed it.
     response_hitAcknowledged(numberAcknowledged);
@@ -475,6 +475,11 @@ void received_resetBuffer(void){
     receive_startTag = 0;
     receive_endTag = 0;
     receive_position = 1;
+
+    //Added to prevent some potential bug.
+    //Should be updated to something like bluetooth_reset_rx().
+    usart_reset_rx(BLUETOOTH_USART);
+
 }
 
 void receive_processString(void){
@@ -492,11 +497,13 @@ void receive_processString(void){
     
     //If it does not have a comma after the message type, it returns.
     if(receive_buffer[receive_startTag+2]!=','){
+        received_resetBuffer();
         return;
     }
     
     //If it does not have a comma before the final #, it returns.
     if(receive_buffer[receive_endTag-1]!=','){
+        received_resetBuffer();
         return;
     }
     

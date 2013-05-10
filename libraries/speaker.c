@@ -57,8 +57,8 @@
 
 
 //Speaker variables
-int count = 0;
-unsigned int period = 0;
+int speaker_count = 0;
+unsigned int speaker_period = 0;
 
 
 void speaker_pause(void){
@@ -164,37 +164,37 @@ void speaker_shoot(void){
 */
 
 void speaker_shoot(void){
-    count++;
+    speaker_count++;
     speaker_toggle();
-    if(count >= MAX_COUNT_SHOOT){
+    if(speaker_count >= MAX_COUNT_SHOOT){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
-    } else if( count % SPEAKER_SHOOT_MOD == 0 ){
-        period += SPEAKER_SHOOT_INCREASE;
-        speaker_setPeriod(period);
+    } else if( speaker_count % SPEAKER_SHOOT_MOD == 0 ){
+        speaker_period += SPEAKER_SHOOT_INCREASE;
+        speaker_setPeriod(speaker_period);
         speaker_refresh();
     }
 }
 
 void speaker_hit(void){
-    count++;
+    speaker_count++;
     speaker_toggle();
-    if(count >= MAX_COUNT_HIT){
+    if(speaker_count >= MAX_COUNT_HIT){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
-    } else if( count % SPEAKER_HIT_MOD == 0 ){
-        period += SPEAKER_HIT_INCREASE;
-        speaker_setPeriod(period);
+    } else if( speaker_count % SPEAKER_HIT_MOD == 0 ){
+        speaker_period += SPEAKER_HIT_INCREASE;
+        speaker_setPeriod(speaker_period);
         speaker_refresh();
     }
 }
 
 
 void speaker_playHit(void){
-    count = 0;
-    period = SPEAKER_HIT_PERIOD;
+    speaker_count = 0;
+    speaker_period = SPEAKER_HIT_PERIOD;
     speaker_pause();
     speaker_setPeriod(SPEAKER_HIT_PERIOD);
     speaker_attachInterrupt(SPEAKER_CHANNEL, speaker_hit);
@@ -203,8 +203,8 @@ void speaker_playHit(void){
 }
 
 void speaker_playShoot(void){
-    count = 0;
-    period = SPEAKER_SHOOT_PERIOD;
+    speaker_count = 0;
+    speaker_period = SPEAKER_SHOOT_PERIOD;
     speaker_pause();
     speaker_setPeriod(SPEAKER_SHOOT_PERIOD);
     speaker_attachInterrupt(SPEAKER_CHANNEL, speaker_shoot);

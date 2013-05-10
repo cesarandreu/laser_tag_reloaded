@@ -7,11 +7,9 @@
 */
 
 #include "storage.h"
-#include <string.h>
-
 
 //The number assigned with a hit.
-int numberOfHits = 1;
+volatile int numberOfHits = 1;
 
 //Array of shots.
 //All are initialized to zero. 
@@ -19,7 +17,7 @@ hit shot_List[MAXIMUM_NUMBER_HITS] = {0, NULL_TERMINATED_GPS_STRING, 0};
 
 //The position we are in on the array. 
 //This gets looped to zero once it reaches MAXIMUM_NUMBER_HITS-1. 
-int shot_listPosition = 0;
+volatile int shot_listPosition = 0;
 
 //Returns al entries that do not have an ID of zero.
 int storage_unsentEntries(void){
@@ -37,12 +35,11 @@ int storage_unsentEntries(void){
 //Checks the whole array for any shots.
 //If any is found then it's returned. Otherwise it returns element zero. 
 hit storage_getShot(void){
-    int i = MAXIMUM_NUMBER_HITS - 1;
-    while(i>=0){
-        if(shot_List[i].ID!=0){
+    int i = 0;
+    for(i = 0 ; i < MAXIMUM_NUMBER_HITS ; i++){
+        if(shot_List[i].ID != 0){
             return shot_List[i];
         }
-        i--;
     }
     return shot_List[0];
 }
@@ -100,12 +97,14 @@ void storage_reset(void){
     }
 }
 
-void storage_add(int id, char* gps){
+hit storage_add(int id, char* gps){
     shot_List[shot_listPosition].ID = id;
     strcpy(shot_List[shot_listPosition].location, gps);
     shot_List[shot_listPosition].hitNumber = numberOfHits;
+    hit hitAdded = shot_List[shot_listPosition];
     storage_increaseNumberHits();
     storage_increaseList();
+    return hitAdded;
 }
 
 

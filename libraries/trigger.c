@@ -48,14 +48,14 @@ void trigger_end(void){
     gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_FLOATING);
 }
 
-void trigger_set_interrupt(voidFuncPtr handler){
+void trigger_setInterrupt(voidFuncPtr handler){
     trigger_handler = handler;
 }
 
-void trigger_enable_interrupt(void){
+void trigger_enableInterrupt(void){
     exti_attach_interrupt(TRIGGER_EXTI_LINE, AFIO_EXTI_PA, trigger_handler, EXTI_RISING);
 }
 
-void trigger_disable_interrupt(void){
+void trigger_disableInterrupt(void){
     exti_detach_interrupt(TRIGGER_EXTI_LINE);
 }
