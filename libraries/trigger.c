@@ -53,7 +53,7 @@ void trigger_setInterrupt(voidFuncPtr handler){
 }
 
 void trigger_enableInterrupt(void){
-    exti_attach_interrupt(TRIGGER_EXTI_LINE, AFIO_EXTI_PA, trigger_handler, EXTI_RISING);
+    exti_attach_interrupt(TRIGGER_EXTI_LINE, TRIGGER_EXTI_PORT, trigger_handler, EXTI_RISING);
 }
 
 void trigger_disableInterrupt(void){
