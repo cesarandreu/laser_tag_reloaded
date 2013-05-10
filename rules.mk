@@ -76,6 +76,7 @@ cSRCS_$(d) += libraries/storage.c
 cSRCS_$(d) += libraries/game.c
 cSRCS_$(d) += libraries/trigger.c
 cSRCS_$(d) += libraries/receiverA.c
+cSRCS_$(d) += libraries/receiverB.c
 
 
 

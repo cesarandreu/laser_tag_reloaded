@@ -1,5 +1,5 @@
-#ifndef _RECEIVER_H_
-#define _RECEIVER_H_
+#ifndef _RECEIVERA_H_
+#define _RECEIVERA_H_
 
 /* Conditional extern "C" so we're safe to call from C++ files */
 #ifdef __cplusplus

@@ -5,6 +5,7 @@
 #include "GPS.h"
 #include "player.h"
 #include "receiverA.h"
+#include "receiverB.h"
 #include "sender.h"
 #include "storage.h"
 #include "trigger.h"
@@ -19,6 +20,32 @@ void game_triggerButton(void){
 
 }
 
+void game_receiverB_Interrupt(void){
+
+    int receivedCode = receiverB_listenSignal();
+
+    //Should use GPS_COORDINATE_LENGTH
+    char gps_location[25] = "GPS_DATA_NOT_VALID_SORRY";
+
+    if(receivedCode>0 && receivedCode<=256){
+
+        if(enemy_checkExist(receivedCode)!=0){
+
+        //Some function to turn on GPS and the location data.
+        //gps_getLocation(gps_location);
+        storage_add(receivedCode, gps_location);
+        transmit_hitData(storage_getShot());
+        transmit_playerData(player_getShots());
+        speaker_playHit();
+
+        //Some function that sets up a timer and disables the received and shooter.
+        //Then it waits like 5~ seconds.
+        //After the 5 seconds are up, it enables the received again and shooter. 
+        }
+
+    }
+
+}
 
 void game_receiverA_Interrupt(void){
 
@@ -55,13 +82,16 @@ void game_new(void){
     storage_start();
 
     trigger_set_interrupt(game_triggerButton);
+
     receiverA_setInterrupt(game_receiverA_Interrupt);
+    receiverB_setInterrupt(game_receiverB_Interrupt);
 
 }
 
 void game_start(void){
     trigger_start();
     receiverA_start();
+    receiverB_start();
 
 }
 
@@ -82,7 +112,7 @@ void game_end(int statusCode){
     trigger_end();
 
     receiverA_end();
-    
+    receiverB_end();
 
     transmit_playerData(player_getShots());
 
