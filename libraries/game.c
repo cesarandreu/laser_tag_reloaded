@@ -2,10 +2,12 @@
 #include "game.h"
 
 void game_triggerButton(void){
-
+    
+    nvic_globalirq_disable();
     player_shoot();
     sender_shoot();
     speaker_playShoot();
+    nvic_globalirq_enable();
 
 }
 

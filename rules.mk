@@ -78,6 +78,7 @@ cSRCS_$(d) += libraries/trigger.c
 cSRCS_$(d) += libraries/receiverA.c
 cSRCS_$(d) += libraries/receiverB.c
 cSRCS_$(d) += libraries/delay.c
+cSRCS_$(d) += libraries/ledGraph.c
 
 
 
