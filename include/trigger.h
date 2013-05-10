@@ -37,6 +37,7 @@ extern "C" {
 #include <libmaple/libmaple.h>
 #include <libmaple/gpio.h>
 
+void trigger_default(void);
 void trigger_start(void);
 void trigger_end(void);
 void trigger_set_interrupt(voidFuncPtr);

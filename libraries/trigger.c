@@ -25,31 +25,37 @@
  * SOFTWARE.
  *****************************************************************************/
 
+#include "trigger.h"
 
-#include "GPS.h"
+#define TRIGGER_PORT GPIOA
+#define TRIGGER_PIN 13
+#define TRIGGER_EXTI_LINE AFIO_EXTI_13
+#define TRIGGER_EXTI_PORT AFIO_EXTI_PA
 
-#define TRIGGER_PORT GPIOC
-#define TRIGGER_PIN 14
+void trigger_default(void){
+    //Does nothing
+}
 
-voidFuncPtr trigger_handler;
+voidFuncPtr trigger_handler = trigger_default;
 
 void trigger_start(void){
-	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);
+    gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_PD);
+    exti_attach_interrupt(TRIGGER_EXTI_LINE, TRIGGER_EXTI_PORT, trigger_handler, EXTI_RISING);
 }
 
 void trigger_end(void){
-	gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_FLOATING);
+    exti_detach_interrupt(TRIGGER_EXTI_LINE);
+    gpio_set_mode(TRIGGER_PORT, TRIGGER_PIN, GPIO_INPUT_FLOATING);
 }
 
 void trigger_set_interrupt(voidFuncPtr handler){
-	trigger_handler = handler;
-	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, handler, EXTI_RISING);
+    trigger_handler = handler;
 }
 
 void trigger_enable_interrupt(void){
-	exti_attach_interrupt(AFIO_EXTI_14, AFIO_EXTI_PC, trigger_handler, EXTI_RISING);
+    exti_attach_interrupt(TRIGGER_EXTI_LINE, AFIO_EXTI_PA, trigger_handler, EXTI_RISING);
 }
 
 void trigger_disable_interrupt(void){
-	exti_detach_interrupt(AFIO_EXTI_14);
+    exti_detach_interrupt(TRIGGER_EXTI_LINE);
 }

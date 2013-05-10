@@ -65,7 +65,6 @@ cSRCS_$(d) += libraries/usb.c
 cSRCS_$(d) += libraries/bluetooth.c
 cSRCS_$(d) += libraries/speaker.c
 cSRCS_$(d) += libraries/sender.c
-cSRCS_$(d) += libraries/receiver.c
 cSRCS_$(d) += libraries/HardWireL.c
 cSRCS_$(d) += libraries/WireBaseL.c
 cSRCS_$(d) += libraries/GPS.c
@@ -76,6 +75,7 @@ cSRCS_$(d) += libraries/enemy.c
 cSRCS_$(d) += libraries/storage.c
 cSRCS_$(d) += libraries/game.c
 cSRCS_$(d) += libraries/trigger.c
+cSRCS_$(d) += libraries/receiverA.c
 
 
 

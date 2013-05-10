@@ -4,16 +4,12 @@
 #include "enemy.h"
 #include "GPS.h"
 #include "player.h"
-#include "receiver.h"
+#include "receiverA.h"
 #include "sender.h"
 #include "storage.h"
+#include "trigger.h"
 
 
-//Testing
-//--{
-
-#include <libmaple/gpio.h>
-#include <libmaple/exti.h>
 
 void game_triggerButton(void){
 
@@ -23,14 +19,13 @@ void game_triggerButton(void){
 
 }
 
-//--}
 
-void game_receiverInterrupt(void){
-    int receivedCode = receiver_listenSignal();
+void game_receiverA_Interrupt(void){
+
+    int receivedCode = receiverA_listenSignal();
 
     //Should use GPS_COORDINATE_LENGTH
     char gps_location[25] = "GPS_DATA_NOT_VALID_SORRY";
-
 
     if(receivedCode>0 && receivedCode<=256){
 
@@ -54,33 +49,19 @@ void game_receiverInterrupt(void){
 
 void game_new(void){
     enemy_start();
-    //gps_start();
     player_start(DEFAULT_PLAYER_CODE);
     sender_start(DEFAULT_PLAYER_CODE);
     speaker_start();
     storage_start();
-    receiver_setInterrupt(game_receiverInterrupt);
 
-    //Some function to set the trigger button as an input, but not enable its interrupt.
+    trigger_set_interrupt(game_triggerButton);
+    receiverA_setInterrupt(game_receiverA_Interrupt);
 
 }
 
 void game_start(void){
-    //gps_end();
-    receiver_enable();
-
-    //Some function to set the trigger button's interrupt.
-
-    //Testing, remove later.
-    //--{
-    
-    //Onboard button
-    //gpio_set_mode(GPIOB, 8, GPIO_INPUT_PD);
-    //exti_attach_interrupt(AFIO_EXTI_8, AFIO_EXTI_PB, game_triggerButton, EXTI_RISING);
-
-    gpio_set_mode(GPIOA, 13, GPIO_INPUT_PD);
-    exti_attach_interrupt(AFIO_EXTI_13, AFIO_EXTI_PA, game_triggerButton, EXTI_RISING);
-    //--}
+    trigger_start();
+    receiverA_start();
 
 }
 
@@ -98,20 +79,13 @@ void game_information(char gameType, int playerNumber, int gameLimit, int enemyN
 
 void game_end(int statusCode){
 
-    //Some function to disable the trigger button's interrupt.
+    trigger_end();
+
+    receiverA_end();
     
-    //Testing, remove later.
-    //--{
-    exti_detach_interrupt(AFIO_EXTI_13);
 
-    //Onboard button
-    //exti_detach_interrupt(AFIO_EXTI_8);
-
-    //--}
-
-    receiver_disable();
-    //gps_end();
     transmit_playerData(player_getShots());
+
     player_reset();
     enemy_reset();
 
