@@ -27,7 +27,7 @@ void game_receiverA_Interrupt(void){
         if(enemy_checkExist(receivedCode)!=0){
 
             //Some function to turn on GPS and the location data.
-            //gps_getLocation(gps_location);
+            gps_getLocation(gps_location, 25);
             transmit_hitData(storage_add(receivedCode, gps_location));
             transmit_playerData(player_getShots());
             speaker_playHit();
@@ -57,7 +57,7 @@ void game_receiverB_Interrupt(void){
         if(enemy_checkExist(receivedCode)!=0){
 
             //Some function to turn on GPS and the location data.
-            //gps_getLocation(gps_location);
+            gps_getLocation(gps_location, 25);
             transmit_hitData(storage_add(receivedCode, gps_location));
             transmit_playerData(player_getShots());
             speaker_playHit();
@@ -84,6 +84,8 @@ void game_new(void){
     trigger_setInterrupt(game_triggerButton);
     receiverA_setInterrupt(game_receiverA_Interrupt);
     receiverB_setInterrupt(game_receiverB_Interrupt);
+
+    gps_start();
 
 }
 

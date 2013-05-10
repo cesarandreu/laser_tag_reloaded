@@ -27,6 +27,7 @@
 
 #include "speaker.h"
 #include "initialize.h"
+#include "GPS.h"
 #include <libmaple/libmaple.h>
 #include <libmaple/rcc.h>
 #include <libmaple/timer.h>
@@ -170,6 +171,9 @@ void speaker_shoot(void){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
+
+        gps_enableInterrupt();
+
     } else if( speaker_count % SPEAKER_SHOOT_MOD == 0 ){
         speaker_period += SPEAKER_SHOOT_INCREASE;
         speaker_setPeriod(speaker_period);
@@ -184,6 +188,9 @@ void speaker_hit(void){
         speaker_pause();
         speaker_detachInterrupt(SPEAKER_CHANNEL);
         gpio_write_bit(SPEAKER_PORT, SPEAKER_PIN, 0);
+
+        gps_enableInterrupt();
+
     } else if( speaker_count % SPEAKER_HIT_MOD == 0 ){
         speaker_period += SPEAKER_HIT_INCREASE;
         speaker_setPeriod(speaker_period);
@@ -193,6 +200,9 @@ void speaker_hit(void){
 
 
 void speaker_playHit(void){
+
+    gps_disableInterrupt();
+
     speaker_count = 0;
     speaker_period = SPEAKER_HIT_PERIOD;
     speaker_pause();
@@ -203,6 +213,9 @@ void speaker_playHit(void){
 }
 
 void speaker_playShoot(void){
+
+    gps_disableInterrupt();
+
     speaker_count = 0;
     speaker_period = SPEAKER_SHOOT_PERIOD;
     speaker_pause();
