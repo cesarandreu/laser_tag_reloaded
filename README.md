@@ -24,11 +24,14 @@ The project has three components:
 
 * [ __Smartphone application__ (Android)](https://github.com/cesarandreu/laser_tag_android)
 
+Videos
+
+* [System demonstration](http://www.youtube.com/watch?v=hs2FppfotFk)
+
 ---
 
 ###System
 
-![Picture of Gun](https://raw.github.com/cesarandreu/laser_tag_reloaded/master/Other/Gun_Image.jpg)
 
 The system (gun + vest) has an infrared laser, two infrared receivers, a speaker, a bluetooth module, a GPS module, a battery gauge, a battery charger, a battery, an LED bar graph, and two push-buttons. 
 
@@ -39,6 +42,14 @@ Everything is controlled through bluetooth commands. The system changes through 
 Basically, the system goes into a _Connected_ state when bluetooth communication is established. Then it goes to _New Game_ mode, which initializes all the interrupts, the storage, and the player variables. Afterwards it awaits for the _Game Information_ command which tells it the game type, the game limit, the list of enemy numbers, and your own player number. When it receives the _Game Start_ command it enables the receivers and trigger button. From this point on the game is live, and whenever a shot is received it transmits the number and location data to the smartphone; when the trigger is pressed the infrared laser transmits your player code. When the server decides that the game has ended it informs the smartphone, the smartphone then sends a _Game End_ command, which resets all the variables, sends everything that is in storage, and disables the receivers and trigger. 
 
 At this point you could start a new game from the smartphone, and the whole process would be repeated.
+
+---
+
+####Picture of the system
+
+![Picture of Gun](https://raw.github.com/cesarandreu/laser_tag_reloaded/master/Other/Gun_Image.jpg)
+
+This is a picture of the final gun. We purchased this toy gun and modded it to put the board and all the components inside. It connects to a vest through a phone cable. 
 
 ---
 
