@@ -28,7 +28,7 @@ The project has three components:
 
 ###System
 
-![Picture of Gun](cesarandreu.github.com/laser_tag_reloaded/Other/Gun_Image.jpg)
+![Picture of Gun](https://raw.github.com/cesarandreu/laser_tag_reloaded/master/Other/Gun_Image.jpg)
 
 The system (gun + vest) has an infrared laser, two infrared receivers, a speaker, a bluetooth module, a GPS module, a battery gauge, a battery charger, a battery, an LED bar graph, and two push-buttons. 
 
